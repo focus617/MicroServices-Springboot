@@ -7,7 +7,7 @@ import org.springframework.boot.ApplicationRunner
 import org.springframework.stereotype.Component
 import kotlin.random.Random
 
-@Component
+//@Component
 class DataSeeder (private val productRepository: ProductRepository) : ApplicationRunner {
 
     override fun run(args: ApplicationArguments?) {
