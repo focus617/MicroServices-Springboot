@@ -11,14 +11,14 @@ import kotlin.random.Random
 class DataSeeder (private val productRepository: ProductRepository) : ApplicationRunner {
 
     override fun run(args: ApplicationArguments?) {
-        for (i in 1..50) {
-            val product = Product()
-            product.title = "Title #" + i
-            product.description = "Description #" + (i + 1)
-            product.image = "http://focus617.com/200/200?" + Random.nextInt(10000)
-            product.price = Random.nextDouble(10.0, 100.0)
-            this.productRepository.save(product)
-        }
+//        for (i in 1..50) {
+//            val product = Product()
+//            product.title = "Title #" + i
+//            product.description = "Description #" + (i + 1)
+//            product.image = "http://focus617.com/200/200?" + Random.nextInt(10000)
+//            product.price = Random.nextDouble(10.0, 100.0)
+//            this.productRepository.save(product)
+//        }
     }
 
 }
