@@ -24,28 +24,19 @@ class MockProductDataSource : ProductDataSource {
     override fun findById(id: Int): Product? = products.firstOrNull { it.id == id }
 
     override fun create(product: Product): Product {
-        if (products.any { it.id == product.id }) {
-            throw IllegalArgumentException("Product with id=${product.id} already exists.")
-        }
         products.add(product)
         return product
     }
 
     override fun update(product: Product): Product {
         val currentProduct = products.firstOrNull { it.id == product.id }
-            ?: throw NoSuchElementException("Could not find a product with id=${product.id}")
-
         products.remove(currentProduct)
         products.add(product)
-
         return product
     }
 
     override fun deleteById(id: Int) {
-        val currentProduct = products.firstOrNull { it.id == id }
-            ?: throw NoSuchElementException("Could not find a product with id=${id}")
-
-        products.remove(currentProduct)
+        products.firstOrNull { it.id == id } ?.let{ products.remove(it) }
     }
 
     override fun countSearch(s: String): Int {

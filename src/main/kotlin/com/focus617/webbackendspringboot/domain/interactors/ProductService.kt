@@ -11,7 +11,6 @@ class ProductService(private val productRepository: ProductRepository) {
     fun getProducts(): Collection<Product> = productRepository.findAll()
 
     fun getProduct(id: Int): Product = productRepository.findById(id)
-        ?: throw NoSuchElementException("Could not find a Product with ID=$id")
 
     fun getBackendProducts(s: String, sort: String, page: Int): Any {
         val sizePerPage = 10

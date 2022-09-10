@@ -8,7 +8,7 @@ import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Component
 
 @Component
-class ProductRepository(@Qualifier("Mock") private val dataSource: ProductDataSource) {
+class ProductRepository(@Qualifier("Database") private val dataSource: ProductDataSource) {
     fun findAll(): List<Product> = dataSource.findAll()
 
     fun findAll(s: String, sort: String, page: Int, sizePerPage: Int = 10): List<Product>{
@@ -20,7 +20,9 @@ class ProductRepository(@Qualifier("Mock") private val dataSource: ProductDataSo
         return dataSource.findAll(s, direction, page, sizePerPage)
     }
 
-    fun findById(id: Int): Product? = dataSource.findById(id)
+    fun findById(id: Int): Product {
+        return dataSource.findById(id) ?: throw NoSuchElementException("Could not find a Product with id=$id")
+    }
 
     fun create(product: Product): Product {
         val products = dataSource.findAll()
@@ -30,7 +32,23 @@ class ProductRepository(@Qualifier("Mock") private val dataSource: ProductDataSo
         return dataSource.create(product)
     }
 
-    fun update(product: Product): Product = dataSource.update(product)
-    fun deleteById(id: Int): Unit = dataSource.deleteById(id)
+    fun update(product: Product): Product {
+        val products = dataSource.findAll()
+        if (products.any { it.id == product.id }) {
+            return dataSource.update(product)
+        }
+        else {
+            throw NoSuchElementException("Could not find a product with id=${product.id}")
+        }
+    }
+
+    fun deleteById(id: Int): Unit{
+        val products = dataSource.findAll()
+        products.firstOrNull { it.id == id }
+            ?: throw NoSuchElementException("Could not find a product with id=${id}")
+
+        dataSource.deleteById(id)
+    }
+
     fun countSearch(s: String): Int = dataSource.countSearch(s)
 }
