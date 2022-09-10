@@ -217,7 +217,7 @@ internal class ProductControllerTest @Autowired constructor(
         @Test
         fun `should delete the product with the given product id`() {
             // Given
-            val productId = "229"
+            val productId = "231"
 
             // When/then
             mockMvc.delete("$baseUrl/$productId")
