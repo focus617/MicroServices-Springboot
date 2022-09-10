@@ -16,6 +16,14 @@ class ProductController(private val productRepository: ProductRepository) {
     @GetMapping
     fun getProducts(): Collection<Product> = this.productRepository.findAll()
 
+    @GetMapping("/{id}")
+    fun getProduct(@PathVariable id: Int): Product{
+        val foundProducts = this.productRepository.findAllById(listOf(id))
+
+        if(foundProducts.size==0) throw NoSuchElementException("Could not find a Product with ID=$id")
+        else return foundProducts[0]
+    }
+
     @GetMapping("/backend")
     fun getBackendProducts(
         @RequestParam("s", defaultValue = "") s: String,
@@ -28,7 +36,7 @@ class ProductController(private val productRepository: ProductRepository) {
             else -> Sort.unsorted()
         }
 
-        val perPage = 9
+        val perPage = 10
         val total = this.productRepository.countSearch(s)
 
         return PaginatedResponse(
@@ -39,6 +47,17 @@ class ProductController(private val productRepository: ProductRepository) {
         )
     }
 
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    fun addProduct(@RequestBody product: Product): Product {
+
+        val products = this.productRepository.findAll()
+        if (products.any { it.id == product.id }) {
+            throw IllegalArgumentException("Product with ID ${product.id} already exists.")
+        }
+
+        return this.productRepository.save(product)
+    }
 
     @ExceptionHandler(NoSuchElementException::class)
     fun handleNotFound(e: NoSuchElementException): ResponseEntity<String> =
