@@ -68,7 +68,7 @@ internal class ProductControllerTest @Autowired constructor(
     }
 
     @Nested
-    @DisplayName("GET /api/Product/{id}")
+    @DisplayName("GET /api/products/{id}")
     @TestInstance(Lifecycle.PER_CLASS)
     inner class GetProduct {
 
@@ -103,7 +103,7 @@ internal class ProductControllerTest @Autowired constructor(
     }
 
     @Nested
-    @DisplayName("POST /api/Products")
+    @DisplayName("POST /api/products")
     @TestInstance(Lifecycle.PER_CLASS)
     inner class PostNewProduct {
         @Test
