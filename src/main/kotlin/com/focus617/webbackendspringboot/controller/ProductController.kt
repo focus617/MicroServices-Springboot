@@ -36,14 +36,15 @@ class ProductController(private val productRepository: ProductRepository) {
             else -> Sort.unsorted()
         }
 
-        val perPage = 10
+        val sizePerPage = 10
         val total = this.productRepository.countSearch(s)
 
         return PaginatedResponse(
-            data = this.productRepository.search(s, PageRequest.of(page - 1, perPage, direction)),
+            data = this.productRepository.search(s, PageRequest.of(page - 1, sizePerPage, direction)),
             total,
+            sizePerPage,
             page,
-            last_page = (total / perPage) + 1
+            totalPages = (total / sizePerPage) + 1
         )
     }
 
