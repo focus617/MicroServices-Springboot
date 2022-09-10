@@ -11,9 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
-import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.get
-import org.springframework.test.web.servlet.post
+import org.springframework.test.web.servlet.*
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -36,7 +34,7 @@ internal class ProductControllerTest @Autowired constructor(
                 .andExpect {
                     status { isOk() }
                     content { contentType(MediaType.APPLICATION_JSON) }
-                    jsonPath("$[0].title") { value("Title #1") }
+//                    jsonPath("$[0].title") { value("Title #3") }
                 }
         }
 
@@ -75,7 +73,7 @@ internal class ProductControllerTest @Autowired constructor(
         @Test
         fun `should return the Product with the given id`() {
             // Given
-            val id = 101
+            val id = 180
 
             // When/then
             mockMvc.get("$baseUrl/$id")
@@ -83,7 +81,7 @@ internal class ProductControllerTest @Autowired constructor(
                 .andExpect {
                     status { isOk() }
                     content { contentType(MediaType.APPLICATION_JSON) }
-                    jsonPath("$.id") { value(101) }
+                    jsonPath("$.id") { value(id) }
                 }
         }
 
@@ -130,15 +128,15 @@ internal class ProductControllerTest @Autowired constructor(
                     jsonPath("$.price") { value(newProduct.price) }
                 }
 
+            //TODO: how to retrieve newProduct.id from above performPost
 //            mockMvc.get("$baseUrl/${newProduct.id}")
 //                .andExpect { content { json(objectMapper.writeValueAsString(newProduct)) } }
-
         }
 
         @Test
         fun `should return BAD REQUEST if Product with given product id already exist`() {
             // Given
-            val invalidProduct = Product(101, "Title_Invalid", "Description_Invalid")
+            val invalidProduct = Product(180, "Title_Invalid", "Description_Invalid")
 
             // When
             val performPost = mockMvc.post(baseUrl) {
@@ -152,7 +150,94 @@ internal class ProductControllerTest @Autowired constructor(
                 .andExpect {
                     status { isBadRequest() }
                 }
+        }
+    }
 
+    @Nested
+    @DisplayName("PATCH /api/products")
+    @TestInstance(Lifecycle.PER_CLASS)
+    inner class PatchExistingProduct {
+
+        @Test
+        fun `should update an existing product`() {
+            // Given
+            val updatedProduct =
+                Product(121, "Title NewProduct", "Description NewProduct", "http://focus617.com/200/200?188", 99.99)
+
+            // When
+            val performPatchRequest = mockMvc.patch(baseUrl) {
+                contentType = MediaType.APPLICATION_JSON
+                content = objectMapper.writeValueAsString(updatedProduct)
+            }
+
+            // Then
+            performPatchRequest
+                .andDo { print() }
+                .andExpect {
+                    status { isOk() }
+                    content {
+                        contentType(MediaType.APPLICATION_JSON)
+                        json(objectMapper.writeValueAsString(updatedProduct))
+                    }
+                }
+
+            mockMvc.get("$baseUrl/${updatedProduct.id}")
+                .andExpect { content { json(objectMapper.writeValueAsString(updatedProduct)) } }
+        }
+
+        @Test
+        fun `should return NOT FOUND if no product with given id exists`() {
+            // Given
+            val invalidId = 9999
+            val invalidProduct =
+                Product(invalidId, "Title NewProduct", "Description NewProduct", "http://focus617.com/200/200?188", 99.99)
+
+
+            // When
+            val performPost = mockMvc.patch(baseUrl) {
+                contentType = MediaType.APPLICATION_JSON
+                content = objectMapper.writeValueAsString(invalidProduct)
+            }
+
+            // Then
+            performPost
+                .andDo { print() }
+                .andExpect {
+                    status { isNotFound() }
+                }
+        }
+
+    }
+
+    @Nested
+    @DisplayName("DELETE /api/products/{id}")
+    @TestInstance(Lifecycle.PER_CLASS)
+    inner class DeleteExistingProduct {
+
+        @Test
+        fun `should delete the product with the given product id`() {
+            // Given
+            val productId = "229"
+
+            // When/then
+            mockMvc.delete("$baseUrl/$productId")
+                .andDo { print() }
+                .andExpect { status { isNoContent() } }
+
+            mockMvc.get("$baseUrl/$productId")
+                .andExpect { status { isNotFound() } }
+
+        }
+
+        @Test
+        fun `should return NOT FOUND if no product with given id exists`() {
+            // Given
+            val invalidProductId = 9999
+
+            // When/then
+            mockMvc.delete("$baseUrl/$invalidProductId")
+                .andDo { print() }
+                .andExpect { status { isNotFound() } }
         }
     }
 

@@ -27,6 +27,13 @@ class ProductController(private val service: ProductService) {
     @ResponseStatus(HttpStatus.CREATED)
     fun addProduct(@RequestBody product: Product): Product = service.addProduct(product)
 
+    @PatchMapping
+    fun updateProduct(@RequestBody product: Product): Product = service.updateProduct(product)
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun deleteBank(@PathVariable id: Int): Unit = service.deleteProduct(id)
+
     @ExceptionHandler(NoSuchElementException::class)
     fun handleNotFound(e: NoSuchElementException): ResponseEntity<String> =
         ResponseEntity(e.message, HttpStatus.NOT_FOUND)

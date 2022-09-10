@@ -48,4 +48,25 @@ class ProductService(private val productRepository: ProductRepository) {
         return productRepository.save(product)
     }
 
+    fun updateProduct(product: Product): Product {
+
+        if (!productRepository.existsById(product.id)){
+            throw NoSuchElementException("Could not find a Product with ID=${product.id}")
+        }
+        else {
+            productRepository.save(product)
+            return product
+        }
+
+    }
+
+    fun deleteProduct(id: Int) {
+
+        if (!productRepository.existsById(id)){
+            throw NoSuchElementException("Could not find a Product with ID=${id}")
+        }
+        else {
+            productRepository.deleteAllById(listOf(id))
+        }
+    }
 }
