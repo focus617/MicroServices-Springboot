@@ -30,6 +30,7 @@ class ProductController(private val productRepository: ProductRepository) {
 
         val perPage = 9
         val total = this.productRepository.countSearch(s)
+
         return PaginatedResponse(
             data = this.productRepository.search(s, PageRequest.of(page - 1, perPage, direction)),
             total,

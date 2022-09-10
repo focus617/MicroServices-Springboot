@@ -7,22 +7,22 @@ import javax.persistence.GenerationType
 import javax.persistence.Id
 
 @Entity
-class Product {
+data class Product (
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    var id = 0
+    var id: Int = 0,
 
     @Column
-    var title = ""
+    var title: String = "",
 
     @Column
-    var description = ""
+    var description: String = "",
 
     @Column
-    var image = ""
+    var image: String = "",
 
     @Column
-    var price  = 0.0
+    var price: Double = 0.0
 
-}
+)
