@@ -1,4 +1,4 @@
-package com.focus617.webbackendspringboot.data.dtos
+package com.focus617.webbackendspringboot.domain.interactors.dtos
 
 data class PaginatedResponse(
     val data: List<Any>,

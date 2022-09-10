@@ -1,6 +1,6 @@
 package com.focus617.webbackendspringboot.domain.interactors
 
-import com.focus617.webbackendspringboot.data.dtos.PaginatedResponse
+import com.focus617.webbackendspringboot.domain.interactors.dtos.PaginatedResponse
 import com.focus617.webbackendspringboot.domain.model.Product
 import com.focus617.webbackendspringboot.domain.repository.ProductRepository
 import org.springframework.data.domain.PageRequest
