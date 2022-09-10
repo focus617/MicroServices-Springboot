@@ -1,1 +1,14 @@
 GET http://localhost:8080
+###
+GET http://localhost:8080/api
+###
+GET http://localhost:8080/api/products
+###
+GET http://localhost:8080/api/products/102
+###
+GET http://localhost:8080/api/products/backend
+###
+GET http://localhost:8080/api/products/backend?sort=desc
+###
+GET http://localhost:8080/api/products/backend?page=4
+###
