@@ -4,11 +4,21 @@ GET http://localhost:8080/api
 ###
 GET http://localhost:8080/api/products
 ###
-GET http://localhost:8080/api/products/102
-###
 GET http://localhost:8080/api/products/backend
 ###
 GET http://localhost:8080/api/products/backend?sort=desc
 ###
 GET http://localhost:8080/api/products/backend?page=4
 ###
+POST http://localhost:8080/api/products
+Content-Type: application/json
+
+{
+  "id": 0,
+  "title": "Title New",
+  "description": "Description New",
+  "image": "http://focus617.com/200/200?1234",
+  "price": 17.096355532475926
+}
+###
+GET http://localhost:8080/api/products/214
