@@ -46,7 +46,7 @@ internal class ProductControllerTest @Autowired constructor(
                 .andExpect {
                     status { isOk() }
                     content { contentType(MediaType.APPLICATION_JSON) }
-                    jsonPath("$.data.size()") { value(10) }
+                    jsonPath("$.data.size()") { value(3) }
                     jsonPath("$.page") { value(1) }
 //                    jsonPath("$.last_page") { value(("$.total".toInt())/10 + 1) }
                 }
@@ -73,7 +73,7 @@ internal class ProductControllerTest @Autowired constructor(
         @Test
         fun `should return the Product with the given id`() {
             // Given
-            val id = 180
+            val id = 1
 
             // When/then
             mockMvc.get("$baseUrl/$id")
@@ -136,7 +136,7 @@ internal class ProductControllerTest @Autowired constructor(
         @Test
         fun `should return BAD REQUEST if Product with given product id already exist`() {
             // Given
-            val invalidProduct = Product(180, "Title_Invalid", "Description_Invalid")
+            val invalidProduct = Product(1, "Title_Invalid", "Description_Invalid")
 
             // When
             val performPost = mockMvc.post(baseUrl) {
@@ -162,7 +162,7 @@ internal class ProductControllerTest @Autowired constructor(
         fun `should update an existing product`() {
             // Given
             val updatedProduct =
-                Product(121, "Title NewProduct", "Description NewProduct", "http://focus617.com/200/200?188", 99.99)
+                Product(2, "Title NewProduct", "Description NewProduct", "http://focus617.com/200/200?188", 99.99)
 
             // When
             val performPatchRequest = mockMvc.patch(baseUrl) {
@@ -217,7 +217,7 @@ internal class ProductControllerTest @Autowired constructor(
         @Test
         fun `should delete the product with the given product id`() {
             // Given
-            val productId = "231"
+            val productId = "3"
 
             // When/then
             mockMvc.delete("$baseUrl/$productId")

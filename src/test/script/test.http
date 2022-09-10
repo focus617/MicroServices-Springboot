@@ -14,24 +14,24 @@ POST http://localhost:8080/api/products
 Content-Type: application/json
 
 {
-  "id": 0,
+  "id": 4,
   "title": "Title New",
   "description": "Description New",
   "image": "http://focus617.com/200/200?1234",
   "price": 17.096355532475926
 }
 ###
-GET http://localhost:8080/api/products/214
+GET http://localhost:8080/api/products/4
 ###
 PATCH http://localhost:8080/api/products
 Content-Type: application/json
 
 {
-  "id": 121,
-  "title": "Title New",
-  "description": "Description New",
-  "image": "http://focus617.com/200/200?1234",
-  "price": 17.096355532475926
+  "id": 4,
+  "title": "Title Changed",
+  "description": "Description Changed",
+  "image": "http://focus617.com/200/200?9876",
+  "price": 1.2345678
 }
 ###
-DELETE http://localhost:8080/api/products/207
+DELETE http://localhost:8080/api/products/4
