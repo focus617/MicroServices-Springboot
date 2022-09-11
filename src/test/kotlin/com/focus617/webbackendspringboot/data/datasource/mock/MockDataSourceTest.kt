@@ -1,11 +1,26 @@
 package com.focus617.webbackendspringboot.data.datasource.mock
 
+import com.focus617.webbackendspringboot.domain.model.Product
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 internal class MockDataSourceTest {
 
     private val mockDataSource = MockProductDataSource()
+    private val product101 =
+        Product(101, "Code#101", "Title #1", "Description #1", "http://focus617.com/200/200?1", 19.99)
+    private val product102 =
+        Product(102, "Code#102", "Title #2", "Description #2", "http://focus617.com/200/200?2", 29.99)
+    private val product103 =
+        Product(103, "Code#103", "Title #3", "Description #3", "http://focus617.com/200/200?3", 39.99)
+
+    @BeforeEach
+    fun setUp() {
+        mockDataSource.products.add(product101)
+        mockDataSource.products.add(product102)
+        mockDataSource.products.add(product103)
+    }
 
     @Test
     fun `should provide a collection of products`() {
