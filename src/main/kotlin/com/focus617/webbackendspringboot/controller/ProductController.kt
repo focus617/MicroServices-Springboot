@@ -30,6 +30,15 @@ class ProductController(private val service: ProductService) {
     @PatchMapping
     fun updateProduct(@RequestBody product: Product): Product = service.updateProduct(product)
 
+    @PutMapping("/{id}")
+    fun updateProduct(
+        @PathVariable id: Int,
+        @RequestParam(required = false) title: String?,
+        @RequestParam(required = false) description: String?,
+        @RequestParam(required = false) image: String?,
+        @RequestParam(required = false, defaultValue = "0.000") price: Double
+    ): Product = service.updateProduct(id, title, description, image, price)
+
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun deleteBank(@PathVariable id: Int): Unit = service.deleteProduct(id)

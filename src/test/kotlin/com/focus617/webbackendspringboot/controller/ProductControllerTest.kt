@@ -144,7 +144,7 @@ internal class ProductControllerTest @Autowired constructor(
         @Test
         fun `should return BAD REQUEST if Product with given product id already exist`() {
             // Given
-            val invalidProduct = Product(1, "Code#111","Title #1", "Description #1")
+            val invalidProduct = Product(1, "Code#111", "Title #1", "Description #1")
 
             // When
             val performPost = mockMvc.post(baseUrl) {
@@ -163,7 +163,7 @@ internal class ProductControllerTest @Autowired constructor(
         @Test
         fun `should return ILLEGAL STATE if Product with given product CODE already exist`() {
             // Given
-            val productWithDuplicatedCode = Product(111, "Code#1","Title #1", "Description #1")
+            val productWithDuplicatedCode = Product(111, "Code#1", "Title #1", "Description #1")
 
             // When
             val performPost = mockMvc.post(baseUrl) {
@@ -191,7 +191,7 @@ internal class ProductControllerTest @Autowired constructor(
             val updatedProduct =
                 Product(
                     2,
-                    "Code#2",
+                    "Code#62",
                     "Title NewProduct",
                     "Description NewProduct",
                     "https://focus617.com/200/200?188",
@@ -245,6 +245,134 @@ internal class ProductControllerTest @Autowired constructor(
                 .andDo { print() }
                 .andExpect {
                     status { isNotFound() }
+                }
+        }
+
+    }
+
+    @Nested
+    @DisplayName("PUT /api/products/{id}?xxx=yyy")
+    @TestInstance(Lifecycle.PER_CLASS)
+    inner class PutExistingProduct {
+        @Test
+        fun `should return NOT FOUND if no product with given id exists`() {
+            // Given
+            val invalidId = 9999
+            val invalidProduct =
+                Product(
+                    invalidId,
+                    "Code#Invalid",
+                    "Title NewProduct",
+                    "Description NewProduct",
+                    "https://focus617.com/200/200?188",
+                    99.99
+                )
+
+
+            // When
+            val performPost = mockMvc.put("$baseUrl/$invalidId?title=${invalidProduct.title}") {
+                contentType = MediaType.APPLICATION_JSON
+                content = objectMapper.writeValueAsString(invalidProduct)
+            }
+
+            // Then
+            performPost
+                .andDo { print() }
+                .andExpect {
+                    status { isNotFound() }
+                }
+        }
+
+        @Test
+        fun `should update an existing product with new title`() {
+            val id = 1
+            val newTitle = "new_title"
+
+            // When/then
+            mockMvc.put("$baseUrl/$id?title=$newTitle")
+                .andDo { print() }
+                .andExpect {
+                    status { isOk() }
+                    content { contentType(MediaType.APPLICATION_JSON) }
+                    jsonPath("$.id") { value(id) }
+                    jsonPath("$.title") { value(newTitle) }
+                }
+        }
+
+        @Test
+        fun `should update an existing product with new description`() {
+            val id = 1
+            val newTitle = "new_title"
+            val newDescription = "newDescription"
+
+            // When/then
+            mockMvc.put("$baseUrl/$id?description=$newDescription")
+                .andDo { print() }
+                .andExpect {
+                    status { isOk() }
+                    content { contentType(MediaType.APPLICATION_JSON) }
+                    jsonPath("$.id") { value(id) }
+                    jsonPath("$.description") { value(newDescription) }
+                }
+        }
+
+
+        @Test
+        fun `should update an existing product with maximum attributes`() {
+            val updatingProduct =
+                Product(
+                    1,
+                    "Code#1",
+                    "Title NewTitle",
+                    "Description NewDescription",
+                    "https://focus617.com/200/200?188",
+                    99.99
+                )
+
+            // When/then
+            mockMvc.put(
+                "$baseUrl/${updatingProduct.id}?title=${updatingProduct.title}&description=${updatingProduct.description}&image=${updatingProduct.image}&price=${updatingProduct.price}"
+            )
+                .andDo { print() }
+                .andExpect {
+                    status { isOk() }
+                    content { contentType(MediaType.APPLICATION_JSON) }
+                    content { json(objectMapper.writeValueAsString(updatingProduct)) }
+                }
+
+            mockMvc.get("$baseUrl/${updatingProduct.id}")
+                .andExpect { content { json(objectMapper.writeValueAsString(updatingProduct)) } }
+
+        }
+
+        @Test
+        fun `should update product when price is NOT set to 0`() {
+            val id = 1
+            val newPrice = 9.99999
+
+            // When/then
+            mockMvc.put("$baseUrl/$id?price=$newPrice")
+                .andDo { print() }
+                .andExpect {
+                    status { isOk() }
+                    content { contentType(MediaType.APPLICATION_JSON) }
+                    jsonPath("$.id") { value(id) }
+                    jsonPath("$.price") { value(newPrice) }
+                }
+        }
+
+        @Test
+        fun `should NOT update product when price is set to 0`() {
+            val id = 1
+
+            // When/then
+            mockMvc.put("$baseUrl/$id?price=0")
+                .andDo { print() }
+                .andExpect {
+                    status { isOk() }
+                    content { contentType(MediaType.APPLICATION_JSON) }
+                    jsonPath("$.id") { value(id) }
+                    jsonPath("$.price") { isNotEmpty() }
                 }
         }
 

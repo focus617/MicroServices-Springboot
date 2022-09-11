@@ -29,6 +29,9 @@ class ProductService(private val productRepository: ProductRepository) {
 
     fun updateProduct(product: Product): Product = productRepository.update(product)
 
+    fun updateProduct(id: Int, title: String?, description: String?, image: String?, price: Double): Product =
+        productRepository.update(id, title, description, image, price)
+
     fun deleteProduct(id: Int) = productRepository.deleteById(id)
 
 }

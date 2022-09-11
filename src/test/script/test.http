@@ -50,3 +50,10 @@ Content-Type: application/json
 }
 ###
 DELETE http://localhost:8080/api/products/241
+
+###
+PUT http://localhost:8080/api/products/1?title=newtitle
+###
+PUT http://localhost:8080/api/products/1?description=newDescription
+###
+PUT http://localhost:8080/api/products/1?title=title&description=Description&price=0.10&image=https://focus617.com/21233
