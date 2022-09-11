@@ -7,7 +7,7 @@ import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Repository
 
 @Repository("Database")
-class DatabaseDataSource(private val productDao: ProductDao) : ProductDataSource {
+class DatabaseProductDataSource(private val productDao: ProductDao) : ProductDataSource {
 
     override fun findAll(): List<Product> = productDao.findAll()
 
@@ -21,19 +21,9 @@ class DatabaseDataSource(private val productDao: ProductDao) : ProductDataSource
 
     override fun create(product: Product): Product = productDao.save(product)
 
-    override fun update(product: Product): Product {
-//        if (productDao.existsById(product.id)) {
-//            throw NoSuchElementException("Could not find a Product with ID=${product.id}")
-//        }
-        return productDao.save(product)
-    }
+    override fun update(product: Product): Product = productDao.save(product)
 
-    override fun deleteById(id: Int) {
-//        if (!productDao.existsById(id)){
-//            throw NoSuchElementException("Could not find a Product with ID=${id}")
-//        }
-        productDao.deleteAllById(listOf(id))
-    }
+    override fun deleteById(id: Int) = productDao.deleteAllById(listOf(id))
 
     override fun countSearch(s: String): Int = productDao.countSearch(s)
 
