@@ -37,10 +37,16 @@ class ProductRepository(@Qualifier("Database") private val dataSource: ProductDa
     }
 
     fun update(product: Product): Product {
-        if (dataSource.existsById(product.id)) {
-            return dataSource.update(product)
-        } else {
+        if (!dataSource.existsById(product.id)) {
             throw NoSuchElementException("Could not find a product with id=${product.id}")
+        }
+        else {
+            val products = dataSource.findAll()
+            if (products.any { it.code == product.code }) {
+                throw IllegalArgumentException("Product CODE ${product.code} already taken.")
+            }
+
+            return dataSource.update(product)
         }
     }
 

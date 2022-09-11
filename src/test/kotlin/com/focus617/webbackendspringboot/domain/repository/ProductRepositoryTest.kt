@@ -68,7 +68,7 @@ internal class ProductRepositoryTest {
         }
 
         @Test
-        fun `should return null if the given product id does not exist`() {
+        fun `should throw NoSuchElementException if the given product id does not exist`() {
             // Given
             val invalidId = 9999
 
@@ -79,6 +79,49 @@ internal class ProductRepositoryTest {
                 "java.util.NoSuchElementException was expected"
             )
             assertThat(exceptionThrown).hasMessageContaining("Could not find a Product with id=$invalidId")
+        }
+    }
+
+    @Nested
+    @DisplayName("update")
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+    inner class Update {
+
+        @Test
+        fun `should throw NoSuchElementException if the given product id does not exist`() {
+            // Given
+            val invalidId = 9999
+            val productInvalid =
+                Product(
+                    invalidId,
+                    "Code#invalid",
+                    "Title invalid",
+                    "Description invalid",
+                    "http://focus617.com/200/200?invalid",
+                    19.99
+                )
+
+            // When / Then
+            val exceptionThrown = Assertions.assertThrows(
+                NoSuchElementException::class.java,
+                { repository.update(productInvalid) },
+                "java.util.NoSuchElementException was expected"
+            )
+            assertThat(exceptionThrown).hasMessageContaining("Could not find a product with id=$invalidId")
+        }
+
+        @Test
+        fun `should throw IllegalArgumentException if update product code to any taken code in DB`() {
+            // Given
+            product101.code = "Code#102"    // already taken by product102
+
+            // When / Then
+            val exceptionThrown = Assertions.assertThrows(
+                IllegalArgumentException::class.java,
+                { repository.update(product101) },
+                "java.util.IllegalArgumentException was expected"
+            )
+            assertThat(exceptionThrown).hasMessageContaining("Product CODE ${product101.code} already taken")
         }
     }
 }
