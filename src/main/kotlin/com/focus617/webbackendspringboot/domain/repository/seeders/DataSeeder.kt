@@ -14,9 +14,10 @@ class DataSeeder (private val productRepository: ProductRepository) : Applicatio
         for (i in 1..50) {
             val product = Product()
             product.id = i                          // used only for MockDataSource
-            product.title = "Title #" + i
-            product.description = "Description #" + (i + 1)
-            product.image = "http://focus617.com/200/200?" + Random.nextInt(10000)
+            product.code = "Code#$i"
+            product.title = "Title #$i"
+            product.description = "Description #$i"
+            product.image = "https://focus617.com/200/200?" + Random.nextInt(10000)
             product.price = Random.nextDouble(10.0, 100.0)
             this.productRepository.create(product)
         }

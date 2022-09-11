@@ -14,6 +14,9 @@ data class Product (
     var id: Int = 0,
 
     @Column
+    var code: String = "",
+
+    @Column
     var title: String = "",
 
     @Column

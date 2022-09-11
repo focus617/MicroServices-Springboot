@@ -1,7 +1,6 @@
 package com.focus617.webbackendspringboot.data.datasource
 
 import com.focus617.webbackendspringboot.domain.model.Product
-import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
 
 interface ProductDataSource {

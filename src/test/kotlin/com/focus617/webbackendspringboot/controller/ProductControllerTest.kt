@@ -39,7 +39,7 @@ internal class ProductControllerTest @Autowired constructor(
         }
 
         @Test
-        fun `should return sorted products with default product number per page`() {
+        fun `should return sorted products with default element number per page`() {
             // When/then
             mockMvc.get("$baseUrl/backend?sort=desc")
                 .andDo { print() }
@@ -53,7 +53,7 @@ internal class ProductControllerTest @Autowired constructor(
         }
 
         @Test
-        fun `should return paged products with requestd page`() {
+        fun `should return paged products with requested page`() {
             // When/then
             mockMvc.get("$baseUrl/backend?sort=asc&page=2")
                 .andDo { print() }
@@ -108,7 +108,14 @@ internal class ProductControllerTest @Autowired constructor(
         fun `should add the new Product`() {
             // Given
             val newProduct =
-                Product(51, "Title NewProduct", "Description NewProduct", "http://focus617.com/200/200?188", 99.99)
+                Product(
+                    51,
+                    "Code#51",
+                    "Title NewProduct",
+                    "Description NewProduct",
+                    "https://focus617.com/200/200?188",
+                    99.99
+                )
 
             // When
             val performPost = mockMvc.post(baseUrl) {
@@ -123,6 +130,7 @@ internal class ProductControllerTest @Autowired constructor(
                     status { isCreated() }
                     content { contentType(MediaType.APPLICATION_JSON) }
                     jsonPath("$.title") { value("Title NewProduct") }
+                    jsonPath("$.code") { value(newProduct.code) }
                     jsonPath("$.description") { value(newProduct.description) }
                     jsonPath("$.image") { value(newProduct.image) }
                     jsonPath("$.price") { value(newProduct.price) }
@@ -136,12 +144,31 @@ internal class ProductControllerTest @Autowired constructor(
         @Test
         fun `should return BAD REQUEST if Product with given product id already exist`() {
             // Given
-            val invalidProduct = Product(1, "Title_Invalid", "Description_Invalid")
+            val invalidProduct = Product(1, "Code#111","Title #1", "Description #1")
 
             // When
             val performPost = mockMvc.post(baseUrl) {
                 contentType = MediaType.APPLICATION_JSON
                 content = objectMapper.writeValueAsString(invalidProduct)
+            }
+
+            // Then
+            performPost
+                .andDo { print() }
+                .andExpect {
+                    status { isBadRequest() }
+                }
+        }
+
+        @Test
+        fun `should return ILLEGAL STATE if Product with given product CODE already exist`() {
+            // Given
+            val productWithDuplicatedCode = Product(111, "Code#1","Title #1", "Description #1")
+
+            // When
+            val performPost = mockMvc.post(baseUrl) {
+                contentType = MediaType.APPLICATION_JSON
+                content = objectMapper.writeValueAsString(productWithDuplicatedCode)
             }
 
             // Then
@@ -162,7 +189,14 @@ internal class ProductControllerTest @Autowired constructor(
         fun `should update an existing product`() {
             // Given
             val updatedProduct =
-                Product(2, "Title NewProduct", "Description NewProduct", "http://focus617.com/200/200?188", 99.99)
+                Product(
+                    2,
+                    "Code#2",
+                    "Title NewProduct",
+                    "Description NewProduct",
+                    "https://focus617.com/200/200?188",
+                    99.99
+                )
 
             // When
             val performPatchRequest = mockMvc.patch(baseUrl) {
@@ -190,7 +224,14 @@ internal class ProductControllerTest @Autowired constructor(
             // Given
             val invalidId = 9999
             val invalidProduct =
-                Product(invalidId, "Title NewProduct", "Description NewProduct", "http://focus617.com/200/200?188", 99.99)
+                Product(
+                    invalidId,
+                    "Code#Invalid",
+                    "Title NewProduct",
+                    "Description NewProduct",
+                    "https://focus617.com/200/200?188",
+                    99.99
+                )
 
 
             // When

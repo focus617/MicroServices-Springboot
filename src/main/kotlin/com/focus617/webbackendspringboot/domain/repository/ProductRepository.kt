@@ -3,7 +3,6 @@ package com.focus617.webbackendspringboot.domain.repository
 import com.focus617.webbackendspringboot.data.datasource.ProductDataSource
 import com.focus617.webbackendspringboot.domain.model.Product
 import org.springframework.beans.factory.annotation.Qualifier
-import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Component
 
@@ -11,7 +10,7 @@ import org.springframework.stereotype.Component
 class ProductRepository(@Qualifier("Database") private val dataSource: ProductDataSource) {
     fun findAll(): List<Product> = dataSource.findAll()
 
-    fun findAll(s: String, sort: String, page: Int, sizePerPage: Int = 10): List<Product>{
+    fun findAll(s: String, sort: String, page: Int, sizePerPage: Int = 10): List<Product> {
         val direction = when (sort) {
             "asc" -> Sort.by(Sort.Direction.ASC, "price")
             "desc" -> Sort.by(Sort.Direction.DESC, "price")
@@ -25,10 +24,15 @@ class ProductRepository(@Qualifier("Database") private val dataSource: ProductDa
     }
 
     fun create(product: Product): Product {
+
         val products = dataSource.findAll()
+
         if (products.any { it.id == product.id }) {
             throw IllegalArgumentException("Product with ID ${product.id} already exists.")
+        } else if (products.any { it.code == product.code }) {
+            throw IllegalArgumentException("Product code ${product.code} already taken.")
         }
+
         return dataSource.create(product)
     }
 
@@ -36,13 +40,12 @@ class ProductRepository(@Qualifier("Database") private val dataSource: ProductDa
         val products = dataSource.findAll()
         if (products.any { it.id == product.id }) {
             return dataSource.update(product)
-        }
-        else {
+        } else {
             throw NoSuchElementException("Could not find a product with id=${product.id}")
         }
     }
 
-    fun deleteById(id: Int): Unit{
+    fun deleteById(id: Int) {
         val products = dataSource.findAll()
         products.firstOrNull { it.id == id }
             ?: throw NoSuchElementException("Could not find a product with id=${id}")

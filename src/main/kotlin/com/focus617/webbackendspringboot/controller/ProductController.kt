@@ -25,7 +25,7 @@ class ProductController(private val service: ProductService) {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun addProduct(@RequestBody product: Product): Product = service.addProduct(product)
+    fun addProduct(@RequestBody product: Product): Product = service.addNewProduct(product)
 
     @PatchMapping
     fun updateProduct(@RequestBody product: Product): Product = service.updateProduct(product)

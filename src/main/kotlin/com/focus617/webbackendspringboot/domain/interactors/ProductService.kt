@@ -25,7 +25,7 @@ class ProductService(private val productRepository: ProductRepository) {
         )
     }
 
-    fun addProduct(product: Product): Product = productRepository.create(product)
+    fun addNewProduct(product: Product): Product = productRepository.create(product)
 
     fun updateProduct(product: Product): Product = productRepository.update(product)
 
