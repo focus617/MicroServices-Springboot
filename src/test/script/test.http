@@ -20,8 +20,23 @@ Content-Type: application/json
   "image": "http://focus617.com/200/200?1234",
   "price": 17.096355532475926
 }
+
+### Should fail due to product code has been taken
+POST http://localhost:8080/api/products
+Content-Type: application/json
+
+{
+  "id": 124,
+  "code": "Code#10",
+  "title": "Title New",
+  "description": "Description New",
+  "image": "http://focus617.com/200/200?1234",
+  "price": 17.096355532475926
+}
+
 ###
 GET http://localhost:8080/api/products/241
+
 ###
 PATCH http://localhost:8080/api/products
 Content-Type: application/json
