@@ -34,7 +34,7 @@ internal class ProductControllerTest @Autowired constructor(
                 .andExpect {
                     status { isOk() }
                     content { contentType(MediaType.APPLICATION_JSON) }
-//                    jsonPath("$[0].title") { value("Title #3") }
+                    jsonPath("$[0].title") { value("Title #1") }
                 }
         }
 
@@ -46,7 +46,7 @@ internal class ProductControllerTest @Autowired constructor(
                 .andExpect {
                     status { isOk() }
                     content { contentType(MediaType.APPLICATION_JSON) }
-                    jsonPath("$.data.size()") { value(3) }
+                    jsonPath("$.data.size()") { value(10) }
                     jsonPath("$.page") { value(1) }
 //                    jsonPath("$.last_page") { value(("$.total".toInt())/10 + 1) }
                 }
@@ -88,7 +88,7 @@ internal class ProductControllerTest @Autowired constructor(
         @Test
         fun `should return NOT FOUND if the given product id does not exist`() {
             // Given
-            val invalidId = 999999999
+            val invalidId = 9999
 
             // When/then
             mockMvc.get("$baseUrl/$invalidId")
@@ -108,7 +108,7 @@ internal class ProductControllerTest @Autowired constructor(
         fun `should add the new Product`() {
             // Given
             val newProduct =
-                Product(0, "Title NewProduct", "Description NewProduct", "http://focus617.com/200/200?188", 99.99)
+                Product(51, "Title NewProduct", "Description NewProduct", "http://focus617.com/200/200?188", 99.99)
 
             // When
             val performPost = mockMvc.post(baseUrl) {
@@ -129,8 +129,8 @@ internal class ProductControllerTest @Autowired constructor(
                 }
 
             //TODO: how to retrieve newProduct.id from above performPost
-//            mockMvc.get("$baseUrl/${newProduct.id}")
-//                .andExpect { content { json(objectMapper.writeValueAsString(newProduct)) } }
+            mockMvc.get("$baseUrl/${newProduct.id}")
+                .andExpect { content { json(objectMapper.writeValueAsString(newProduct)) } }
         }
 
         @Test
