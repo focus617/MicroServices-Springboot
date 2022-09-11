@@ -14,7 +14,8 @@ POST http://localhost:8080/api/products
 Content-Type: application/json
 
 {
-  "id": 4,
+  "id": 124,
+  "code": "Code#124",
   "title": "Title New",
   "description": "Description New",
   "image": "http://focus617.com/200/200?1234",

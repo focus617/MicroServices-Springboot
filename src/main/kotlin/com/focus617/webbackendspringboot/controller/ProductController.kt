@@ -2,6 +2,8 @@ package com.focus617.webbackendspringboot.controller
 
 import com.focus617.webbackendspringboot.domain.interactors.ProductService
 import com.focus617.webbackendspringboot.domain.model.Product
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -9,6 +11,8 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/api/products")
 class ProductController(private val service: ProductService) {
+
+    private val log: Logger = LoggerFactory.getLogger("com.focus617.webbackendspringboot.controller.ProductController")
 
     @GetMapping
     fun getProducts(): Collection<Product> = service.getProducts()
@@ -25,7 +29,11 @@ class ProductController(private val service: ProductService) {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun addProduct(@RequestBody product: Product): Product = service.addNewProduct(product)
+    fun addProduct(@RequestBody product: Product): Product {
+        log.info("Product creation request received: {}", product)
+
+        return service.addNewProduct(product)
+    }
 
     @PatchMapping
     fun updateProduct(@RequestBody product: Product): Product = service.updateProduct(product)
