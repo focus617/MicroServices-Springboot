@@ -302,7 +302,6 @@ internal class ProductControllerTest @Autowired constructor(
         @Test
         fun `should update an existing product with new description`() {
             val id = 1
-            val newTitle = "new_title"
             val newDescription = "newDescription"
 
             // When/then

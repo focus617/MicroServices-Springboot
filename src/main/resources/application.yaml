@@ -1,0 +1,25 @@
+server:
+  port: 8080
+  error:
+    include-message: always
+
+spring:
+  application:
+    name: Web-Backend-Server
+    version: 1.0.0-SNAPSHOT
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/mydatabase
+    username: root
+    password: Alc@tel12
+
+  jpa:
+    hibernate:
+      # DB will be drop&create each time, initial data will be seeded by data.seeders.DataSeeder
+      ddl-auto: create-drop
+    generate-ddl: true
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: false
