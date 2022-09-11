@@ -1,4 +1,4 @@
-package com.focus617.webbackendspringboot.data.seeders
+package com.focus617.webbackendspringboot.domain.repository.seeders
 
 import com.focus617.webbackendspringboot.domain.model.Product
 import com.focus617.webbackendspringboot.domain.repository.ProductRepository
