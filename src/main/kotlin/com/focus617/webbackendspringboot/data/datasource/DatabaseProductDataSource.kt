@@ -25,6 +25,8 @@ class DatabaseProductDataSource(private val productDao: ProductDao) : ProductDat
 
     override fun deleteById(id: Int) = productDao.deleteAllById(listOf(id))
 
+    override fun existsById(id: Int): Boolean = productDao.existsById(id)
+
     override fun countSearch(s: String): Int = productDao.countSearch(s)
 
 }

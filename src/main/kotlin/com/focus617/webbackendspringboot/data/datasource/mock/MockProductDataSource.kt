@@ -38,6 +38,8 @@ class MockProductDataSource : ProductDataSource {
         products.firstOrNull { it.id == id }?.let { products.remove(it) }
     }
 
+    override fun existsById(id: Int): Boolean = products.any { it.id == id }
+
     override fun countSearch(s: String): Int {
         return products.size
     }

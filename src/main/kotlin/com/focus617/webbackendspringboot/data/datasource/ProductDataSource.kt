@@ -10,5 +10,6 @@ interface ProductDataSource {
     fun create(product: Product): Product
     fun update(product: Product): Product
     fun deleteById(id: Int): Unit
+    fun existsById(id: Int): Boolean
     fun countSearch(s: String): Int
 }

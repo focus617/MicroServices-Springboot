@@ -37,8 +37,7 @@ class ProductRepository(@Qualifier("Database") private val dataSource: ProductDa
     }
 
     fun update(product: Product): Product {
-        val products = dataSource.findAll()
-        if (products.any { it.id == product.id }) {
+        if (dataSource.existsById(product.id)) {
             return dataSource.update(product)
         } else {
             throw NoSuchElementException("Could not find a product with id=${product.id}")
@@ -46,11 +45,11 @@ class ProductRepository(@Qualifier("Database") private val dataSource: ProductDa
     }
 
     fun deleteById(id: Int) {
-        val products = dataSource.findAll()
-        products.firstOrNull { it.id == id }
-            ?: throw NoSuchElementException("Could not find a product with id=${id}")
-
-        dataSource.deleteById(id)
+        if (dataSource.existsById(id)) {
+            dataSource.deleteById(id)
+        } else {
+            throw NoSuchElementException("Could not find a product with id=${id}")
+        }
     }
 
     fun countSearch(s: String): Int = dataSource.countSearch(s)
