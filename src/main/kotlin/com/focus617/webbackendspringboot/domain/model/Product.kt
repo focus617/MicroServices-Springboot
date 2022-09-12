@@ -1,19 +1,16 @@
 package com.focus617.webbackendspringboot.domain.model
 
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
+import javax.persistence.*
 
+@Table(name = "product")
 @Entity
-data class Product (
-
+data class Product(
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     var id: Int = 0,
 
-    @Column
+    @Column(name = "code", nullable = false)
     var code: String = "",
 
     @Column
