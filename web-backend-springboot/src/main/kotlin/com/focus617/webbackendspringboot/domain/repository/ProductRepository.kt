@@ -2,6 +2,8 @@ package com.focus617.webbackendspringboot.domain.repository
 
 import com.focus617.webbackendspringboot.data.datasource.ProductDataSource
 import com.focus617.webbackendspringboot.domain.model.Product
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Component
@@ -10,6 +12,9 @@ import java.util.*
 
 @Component
 class ProductRepository(@Qualifier("Database") private val dataSource: ProductDataSource) {
+
+    private val log: Logger = LoggerFactory.getLogger(ProductRepository::class.java)
+
     fun findAll(): List<Product> = dataSource.findAll()
 
     fun findAll(s: String, sort: String, page: Int, sizePerPage: Int = 10): List<Product> {
