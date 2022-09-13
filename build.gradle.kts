@@ -29,6 +29,8 @@ var springCloudVersion = "2021.0.4"
 var assertJCoreVersion = "3.23.1"
 var mockkVersion = "1.12.7"
 
+//extra["spring-cloud-dependencies.version"] = "2021.0.4"
+
 apply(plugin = "io.spring.dependency-management")
 
 dependencyManagement {
