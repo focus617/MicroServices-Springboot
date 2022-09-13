@@ -1,9 +1,3 @@
-# 应用服务 WEB访问端口
-server:
-  port: 8080
-  error:
-    include-message: always
-
 # 应用名称
 spring:
   application:
@@ -25,3 +19,24 @@ spring:
     hibernate:
       # DB will be drop&create each time, initial data will be seeded by domain.repository.seeders.DataSeeder
       ddl-auto: create-drop
+
+  # Html模板
+  thymeleaf:
+    cache: false  # 开发时关闭缓存，否则无法看到实时页面
+    mode: HTML
+    encoding: UTF-8
+    servlet:
+      content-type: text/html
+
+# 应用服务 WEB访问端口
+server:
+  port: 8080
+  error:
+    include-message: always
+
+# 日志服务
+logging:
+  file:
+    name: ../logs/web-backend-springboot.log
+  level:
+    org.springframework.web: DEBUG
