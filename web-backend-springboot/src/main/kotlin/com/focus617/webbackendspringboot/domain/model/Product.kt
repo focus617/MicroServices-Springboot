@@ -6,7 +6,14 @@ import javax.persistence.*
 @Entity
 data class Product(
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(
+        name = "product_id_sequence_generator",
+        sequenceName = "product_id_sequence"
+    )
+    @GeneratedValue(
+        strategy = GenerationType.IDENTITY,
+        generator = "product_id_sequence_generator"
+    )
     @Column(name = "id", nullable = false)
     var id: Int = 0,
 

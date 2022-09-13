@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository
 class MockProductDataSource : ProductDataSource {
 
     val products = mutableListOf<Product>()
+    private var lastId: Int = 1
 
     override fun findAll(): List<Product> = products
 
@@ -18,6 +19,7 @@ class MockProductDataSource : ProductDataSource {
     override fun findById(id: Int): Product? = products.firstOrNull { it.id == id }
 
     override fun create(product: Product): Product {
+        product.id = lastId++
         products.add(product)
         return product
     }

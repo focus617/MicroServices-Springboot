@@ -2,19 +2,19 @@ GET http://localhost:8080
 ###
 GET http://localhost:8080/api
 ###
-GET http://localhost:8080/api/products
+GET http://localhost:8080/api/v1/products
 ###
-GET http://localhost:8080/api/products/backend
+GET http://localhost:8080/api/v1/products/backend
 ###
-GET http://localhost:8080/api/products/backend?sort=desc
+GET http://localhost:8080/api/v1/products/backend?sort=desc
 ###
-GET http://localhost:8080/api/products/backend?page=4
-###
-POST http://localhost:8080/api/products
+GET http://localhost:8080/api/v1/products/backend?page=4
+
+### Creat new product
+POST http://localhost:8080/api/v1/products
 Content-Type: application/json
 
 {
-  "id": 124,
   "code": "Code#124",
   "title": "Title New",
   "description": "Description New",
@@ -22,12 +22,14 @@ Content-Type: application/json
   "price": 17.096355532475926
 }
 
+### GET created product
+GET http://localhost:8080/api/v1/products/51
+
 ### Should fail due to product code has been taken
-POST http://localhost:8080/api/products
+POST http://localhost:8080/api/v1/products
 Content-Type: application/json
 
 {
-  "id": 124,
   "code": "Code#10",
   "title": "Title New",
   "description": "Description New",
@@ -35,26 +37,24 @@ Content-Type: application/json
   "price": 17.096355532475926
 }
 
-###
-GET http://localhost:8080/api/products/241
-
-###
-PATCH http://localhost:8080/api/products
+### Change new product
+PATCH http://localhost:8080/api/v1/products
 Content-Type: application/json
 
 {
-  "id": 241,
+  "id": 51,
   "title": "Title Changed",
   "description": "Description Changed",
   "image": "http://focus617.com/200/200?9876",
   "price": 1.2345678
 }
-###
-DELETE http://localhost:8080/api/products/241
 
 ###
-PUT http://localhost:8080/api/products/1?title=newtitle
+PUT http://localhost:8080/api/v1/products/51?title=newtitlebyput
 ###
-PUT http://localhost:8080/api/products/1?description=newDescription
+PUT http://localhost:8080/api/v1/products/51?description=newDescription
 ###
-PUT http://localhost:8080/api/products/1?title=title&description=Description&price=0.10&image=https://focus617.com/21233
+PUT http://localhost:8080/api/v1/products/51?title=title&description=Description&price=0.10&image=https://focus617.com/21233
+
+###
+DELETE http://localhost:8080/api/v1/products/51

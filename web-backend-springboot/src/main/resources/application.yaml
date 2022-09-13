@@ -1,8 +1,10 @@
+# 应用服务 WEB访问端口
 server:
   port: 8080
   error:
     include-message: always
 
+# 应用名称
 spring:
   application:
     name: Web-Backend-Server

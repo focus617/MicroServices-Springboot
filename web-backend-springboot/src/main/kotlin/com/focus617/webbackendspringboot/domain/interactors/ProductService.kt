@@ -1,12 +1,21 @@
 package com.focus617.webbackendspringboot.domain.interactors
 
 import com.focus617.webbackendspringboot.domain.interactors.dtos.PaginatedResponse
+import com.focus617.webbackendspringboot.domain.interactors.dtos.ProductRegistrationRequest
 import com.focus617.webbackendspringboot.domain.model.Product
 import com.focus617.webbackendspringboot.domain.repository.ProductRepository
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
+import org.springframework.web.client.RestTemplate
 
 @Service
-class ProductService(private val productRepository: ProductRepository) {
+class ProductService(
+    private val productRepository: ProductRepository,
+    private val restTemplate: RestTemplate
+) {
+    private val log: Logger =
+        LoggerFactory.getLogger("com.focus617.webbackendspringboot.domain.interactors.ProductService")
 
     fun getProducts(): Collection<Product> = productRepository.findAll()
 
@@ -25,7 +34,29 @@ class ProductService(private val productRepository: ProductRepository) {
         )
     }
 
-    fun addNewProduct(product: Product): Product = productRepository.create(product)
+    fun registerNewProduct(request: ProductRegistrationRequest): Product {
+        log.info("Product registration/creation request received: {}", request)
+
+        val product = productRepository.create(
+            Product(
+                0,
+                request.code,
+                request.title,
+                request.description,
+                request.image,
+                request.price
+            )
+        )
+
+        /** Communicate with other microservice **/
+//        restTemplate.getForObject(
+//            "http://localhost:8080/api/products/{productId}",
+//            PaginatedResponse::class.java,
+//            product.id
+//        )
+
+        return product
+    }
 
     fun updateProduct(product: Product): Product = productRepository.update(product)
 

@@ -26,10 +26,7 @@ class ProductRepository(@Qualifier("Database") private val dataSource: ProductDa
     }
 
     fun create(product: Product): Product {
-
-        if (dataSource.existsById(product.id)) {
-            throw IllegalArgumentException("Product with ID ${product.id} already exists.")
-        } else if (existsByCode(product.code)) {
+        if (existsByCode(product.code)) {
             throw IllegalArgumentException("Product CODE ${product.code} already taken.")
         }
 

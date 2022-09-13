@@ -1,6 +1,7 @@
 package com.focus617.webbackendspringboot.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.focus617.webbackendspringboot.domain.interactors.dtos.ProductRegistrationRequest
 import com.focus617.webbackendspringboot.domain.model.Product
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -20,7 +21,7 @@ internal class ProductControllerTest @Autowired constructor(
     val objectMapper: ObjectMapper
 ) {
 
-    val baseUrl = "/api/products"
+    val baseUrl = "/api/v1/products"
 
     @Nested
     @DisplayName("GET /api/products")
@@ -105,22 +106,20 @@ internal class ProductControllerTest @Autowired constructor(
     @TestInstance(Lifecycle.PER_CLASS)
     inner class PostNewProduct {
         @Test
-        fun `should add the new Product`() {
+        fun `should add the new Product with unique code`() {
             // Given
-            val newProduct =
-                Product(
-                    51,
-                    "Code#51",
-                    "Title NewProduct",
-                    "Description NewProduct",
-                    "https://focus617.com/200/200?188",
-                    99.99
-                )
+            val request = ProductRegistrationRequest(
+                "Code#51",
+                "Title NewProduct",
+                "Description NewProduct",
+                "https://focus617.com/200/200?188",
+                99.99
+            )
 
             // When
             val performPost = mockMvc.post(baseUrl) {
                 contentType = MediaType.APPLICATION_JSON
-                content = objectMapper.writeValueAsString(newProduct)
+                content = objectMapper.writeValueAsString(request)
             }
 
             // Then
@@ -130,45 +129,26 @@ internal class ProductControllerTest @Autowired constructor(
                     status { isCreated() }
                     content { contentType(MediaType.APPLICATION_JSON) }
                     jsonPath("$.title") { value("Title NewProduct") }
-                    jsonPath("$.code") { value(newProduct.code) }
-                    jsonPath("$.description") { value(newProduct.description) }
-                    jsonPath("$.image") { value(newProduct.image) }
-                    jsonPath("$.price") { value(newProduct.price) }
+                    jsonPath("$.code") { value(request.code) }
+                    jsonPath("$.description") { value(request.description) }
+                    jsonPath("$.image") { value(request.image) }
+                    jsonPath("$.price") { value(request.price) }
                 }
 
             //TODO: how to retrieve newProduct.id from above performPost
-            mockMvc.get("$baseUrl/${newProduct.id}")
-                .andExpect { content { json(objectMapper.writeValueAsString(newProduct)) } }
-        }
-
-        @Test
-        fun `should return BAD REQUEST if Product with given product id already exist`() {
-            // Given
-            val invalidProduct = Product(1, "Code#111", "Title #1", "Description #1")
-
-            // When
-            val performPost = mockMvc.post(baseUrl) {
-                contentType = MediaType.APPLICATION_JSON
-                content = objectMapper.writeValueAsString(invalidProduct)
-            }
-
-            // Then
-            performPost
-                .andDo { print() }
-                .andExpect {
-                    status { isBadRequest() }
-                }
+//            mockMvc.get("$baseUrl/${request.id}")
+//                .andExpect { content { json(objectMapper.writeValueAsString(request)) } }
         }
 
         @Test
         fun `should return ILLEGAL STATE if Product with given product CODE already exist`() {
             // Given
-            val productWithDuplicatedCode = Product(111, "Code#1", "Title #1", "Description #1")
+            val requestWithDuplicatedCode = ProductRegistrationRequest("Code#1", "Title #1", "Description #1")
 
             // When
             val performPost = mockMvc.post(baseUrl) {
                 contentType = MediaType.APPLICATION_JSON
-                content = objectMapper.writeValueAsString(productWithDuplicatedCode)
+                content = objectMapper.writeValueAsString(requestWithDuplicatedCode)
             }
 
             // Then

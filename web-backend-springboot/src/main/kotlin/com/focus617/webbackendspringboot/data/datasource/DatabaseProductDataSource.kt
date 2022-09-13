@@ -19,9 +19,9 @@ class DatabaseProductDataSource(private val productDao: ProductDao) : ProductDat
         return if (products.size != 0) products[0] else null
     }
 
-    override fun create(product: Product): Product = productDao.save(product)
+    override fun create(product: Product): Product = productDao.saveAndFlush(product)
 
-    override fun update(product: Product): Product = productDao.save(product)
+    override fun update(product: Product): Product = productDao.saveAndFlush(product)
 
     override fun deleteById(id: Int) = productDao.deleteAllById(listOf(id))
 
