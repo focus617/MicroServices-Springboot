@@ -12,6 +12,6 @@ class HelloController {
     fun helloWorld(): String = "Hello World!"
 
     @GetMapping("api")
-    fun helloNotice(): String = "Hello, this is a RESTful endpoint testing site."
+    fun helloApi(): String = "Hello, this is a RESTful endpoint testing site."
 
 }

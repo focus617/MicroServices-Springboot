@@ -26,7 +26,6 @@ version = "0.0.1-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_17
 
 var springCloudVersion = "2021.0.4"
-var assertJCoreVersion = "3.23.1"
 var mockkVersion = "1.12.7"
 
 //extra["spring-cloud-dependencies.version"] = "2021.0.4"
@@ -45,7 +44,6 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     // Test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.assertj:assertj-core:${assertJCoreVersion}")
     testImplementation("io.mockk:mockk:${mockkVersion}")
 }
 

@@ -15,7 +15,6 @@ group = "com.focus617"
 version = "0.0.1-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_17
 
-var assertJCoreVersion = "3.23.1"
 var mockkVersion = "1.12.7"
 
 dependencies {
@@ -31,7 +30,6 @@ dependencies {
 
     // Test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.assertj:assertj-core:${assertJCoreVersion}")
     testImplementation("io.mockk:mockk:${mockkVersion}")
 }
 

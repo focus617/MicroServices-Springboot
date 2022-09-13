@@ -9,7 +9,7 @@ class ThymeleafController {
 
     @GetMapping("/index")
     fun index(model: Model): String {
-        model.addAttribute("welcome", "This is test page for Thymeleaf.")
+        model.addAttribute("welcome", "Hello, this is test page for Thymeleaf.")
         return "index"
     }
 
