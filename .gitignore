@@ -15,6 +15,7 @@ build/
 .sts4-cache
 
 ### IntelliJ IDEA ###
+/.idea/
 .idea
 *.iws
 *.iml
@@ -30,3 +31,4 @@ out/
 
 ### VS Code ###
 .vscode/
+
