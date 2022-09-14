@@ -22,8 +22,8 @@ class ProductController(private val service: ProductService) {
         @RequestParam("field", defaultValue = "price") field: String,
         @RequestParam("sort", defaultValue = "asc") sort: String,
         @RequestParam("page", defaultValue = "1") currentPage: Int,
-        @RequestParam("limit", defaultValue = "10") limit: Int
-    ): Any = service.getProductsWithParameters(field, sort, currentPage, limit)
+        @RequestParam("limit", defaultValue = "10") sizePerPage: Int
+    ): Any = service.getProductsWithParameters(field, sort, currentPage, sizePerPage)
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

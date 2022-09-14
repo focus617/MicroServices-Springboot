@@ -23,9 +23,9 @@ class ThymeleafController(private val service: ProductService) {
         @RequestParam("field", defaultValue = "price") field: String,
         @RequestParam("sort", defaultValue = "asc") sort: String,
         @RequestParam("page", defaultValue = "1") currentPage: Int,
-        @RequestParam("limit", defaultValue = "10") limit: Int
+        @RequestParam("limit", defaultValue = "10") sizePerPage: Int
     ): String {
-        val page: Page<Product> = service.getProductsInPageWithSorting(field, sort, currentPage, limit)
+        val page: Page<Product> = service.getProductsInPageWithSorting(field, sort, currentPage, sizePerPage)
 
         val totalPages = page.totalPages
         val totalItems = page.totalElements
