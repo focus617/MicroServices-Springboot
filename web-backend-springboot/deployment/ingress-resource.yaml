@@ -8,6 +8,7 @@ metadata:
        ingressClass.kubernetes.io/is-default-class: "true"
 spec:
   controller: k8s.io/ingress-nginx
+
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -44,3 +45,33 @@ spec:
             name: docker-registry
             port:
               number: 5000
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: springboot-ingress
+  namespace: springboot-deployment
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
+    kubernetes.io/tls-acme: 'true'
+spec:
+  ingressClassName: nginx-ingress
+  tls:
+    - hosts:
+        - focus617.com
+      secretName: myapp-secret-tls
+  rules:
+    - host: focus617.com
+      http:
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: web-backend-springboot
+              port:
+                number: 8080

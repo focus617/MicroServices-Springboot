@@ -9,6 +9,8 @@ spring:
     url: jdbc:mysql://localhost:3306/mydatabase
     username: root
     password: Alc@tel12
+    hikari:
+      initialization-fail-timeout: 10000
 
   jpa:
     generate-ddl: true
@@ -34,9 +36,17 @@ server:
   error:
     include-message: always
 
+# 调试开关
+debug: true
+
 # 日志服务
 logging:
   file:
     name: ../logs/web-backend-springboot.log
   level:
     org.springframework.web: DEBUG
+
+user:
+  firstName: Zhiyong
+  lastName: Xu
+
