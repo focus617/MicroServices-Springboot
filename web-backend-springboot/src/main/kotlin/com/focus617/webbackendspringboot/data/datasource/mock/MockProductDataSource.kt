@@ -13,8 +13,8 @@ class MockProductDataSource : ProductDataSource {
 
     override fun findAll(): List<Product> = products
 
-    override fun findAll(s: String, sort: Sort, page: Int, sizePerPage: Int): List<Product> =
-        products.sortedBy { it.id }.windowed(sizePerPage, 1, true)[page]
+    override fun findOnePage(s: String, sort: Sort, pageNumber: Int, sizePerPage: Int): List<Product> =
+        products.sortedBy { it.id }.windowed(sizePerPage, 1, true)[pageNumber]
 
     override fun findById(id: Int): Product? = products.firstOrNull { it.id == id }
 

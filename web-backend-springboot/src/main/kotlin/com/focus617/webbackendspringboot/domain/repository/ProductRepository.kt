@@ -17,13 +17,13 @@ class ProductRepository(@Qualifier("Database") private val dataSource: ProductDa
 
     fun findAll(): List<Product> = dataSource.findAll()
 
-    fun findAll(s: String, sort: String, page: Int, sizePerPage: Int = 10): List<Product> {
+    fun findOnePage(s: String, sort: String, page: Int, sizePerPage: Int = 10): List<Product> {
         val direction = when (sort) {
             "asc" -> Sort.by(Sort.Direction.ASC, "price")
             "desc" -> Sort.by(Sort.Direction.DESC, "price")
             else -> Sort.unsorted()
         }
-        return dataSource.findAll(s, direction, page, sizePerPage)
+        return dataSource.findOnePage(s, direction, page, sizePerPage)
     }
 
     fun findById(id: Int): Product {

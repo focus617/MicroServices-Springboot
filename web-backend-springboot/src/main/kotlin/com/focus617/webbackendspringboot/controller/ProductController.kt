@@ -22,7 +22,7 @@ class ProductController(private val service: ProductService) {
         @RequestParam("s", defaultValue = "") s: String,
         @RequestParam("sort", defaultValue = "") sort: String,
         @RequestParam("page", defaultValue = "1") page: Int
-    ): Any = service.getBackendProducts(s, sort, page)
+    ): Any = service.getProductsWithParameters(s, sort, page)
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

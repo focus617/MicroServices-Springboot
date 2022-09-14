@@ -53,6 +53,21 @@ internal class ProductRepositoryTest {
     }
 
     @Nested
+    @DisplayName("findOnePage")
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+    inner class FindOnePage {
+        @Test
+        fun `should return size less than sizePerPage`() {
+            // When
+            val sizePerPage = 5
+            val products = repository.findOnePage("", "", 1, sizePerPage)
+
+            // Then
+            assertThat(products.size).isLessThanOrEqualTo(sizePerPage)
+        }
+    }
+
+    @Nested
     @DisplayName("findById")
     @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     inner class FindById {

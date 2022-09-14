@@ -11,8 +11,8 @@ class DatabaseProductDataSource(private val productDao: ProductDao) : ProductDat
 
     override fun findAll(): List<Product> = productDao.findAll()
 
-    override fun findAll(s: String, sort: Sort, page: Int, sizePerPage: Int): List<Product> =
-        productDao.search(s, PageRequest.of(page - 1, sizePerPage, sort))
+    override fun findOnePage(s: String, sort: Sort, pageNumber: Int, sizePerPage: Int): List<Product> =
+        productDao.search(s, PageRequest.of(pageNumber - 1, sizePerPage, sort))
 
     override fun findById(id: Int): Product? {
         val products = productDao.findAllById(listOf(id))

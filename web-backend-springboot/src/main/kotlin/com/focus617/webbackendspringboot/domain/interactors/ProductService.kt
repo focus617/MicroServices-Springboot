@@ -20,12 +20,12 @@ class ProductService(
 
     fun getProduct(id: Int): Product = productRepository.findById(id)
 
-    fun getBackendProducts(s: String, sort: String, page: Int): Any {
+    fun getProductsWithParameters(s: String, sort: String, page: Int): Any {
         val sizePerPage = 10
         val total = productRepository.countSearch(s)
 
         return PaginatedResponse(
-            data = productRepository.findAll(s, sort, page, sizePerPage),
+            data = productRepository.findOnePage(s, sort, page, sizePerPage),
             total,
             sizePerPage,
             page,
