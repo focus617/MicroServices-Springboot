@@ -18,7 +18,7 @@ class ProductController(private val service: ProductService) {
     fun getProduct(@PathVariable id: Int): Product = service.getProduct(id)
 
     @GetMapping("/parameters")
-    fun getBackendProducts(
+    fun getProductsWithParameters(
         @RequestParam("s", defaultValue = "") s: String,
         @RequestParam("sort", defaultValue = "") sort: String,
         @RequestParam("page", defaultValue = "1") page: Int
