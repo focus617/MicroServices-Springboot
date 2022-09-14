@@ -13,6 +13,8 @@
 <H2>Test live reload function</H2>
 <br>
 
+<a th:href="@{'/api/v1/products/page/' + ${currentPage} + '/description?sortDir=' + ${reverseSortDir}}"></a>
+
 <nav aria-label="Page navigation example">
     Total Items [[${totalItems}]] : Page [[${currentPage}]] of [[${totalPages}]]
 

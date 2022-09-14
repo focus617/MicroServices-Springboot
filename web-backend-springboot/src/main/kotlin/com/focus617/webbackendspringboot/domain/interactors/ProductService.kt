@@ -21,20 +21,29 @@ class ProductService(
 
     fun getProduct(id: Int): Product = productRepository.findById(id)
 
-    fun getProductsWithParameters(s: String, sort: String, page: Int): Any {
-        val sizePerPage = 10
-        val totalElements = productRepository.countSearch(s)
-
+    fun getProductsWithParameters(
+        field: String,
+        direction: String,
+        pageNumber: Int,
+        sizePerPage: Int = 10
+    ): Any {
+        val page: Page<Product> = productRepository.findOnePageWithSorting(field, direction, pageNumber, sizePerPage)
         return PaginatedResponse(
-            data = productRepository.findOnePage(s, sort, page, sizePerPage),
-            totalElements,
+            data = page.content,
+            page.totalElements.toInt(),
             sizePerPage,
-            page,
-            totalPages = (totalElements / sizePerPage) + 1
+            pageNumber,
+            page.totalPages
         )
     }
 
-    fun getProductsInPage(page: Int): Page<Product> = productRepository.findOnePage(page)
+    fun getProductsInPageWithSorting(
+        field: String,
+        direction: String,
+        pageNumber: Int,
+        sizePerPage: Int = 10
+    ): Page<Product> =
+        productRepository.findOnePageWithSorting(field, direction, pageNumber, sizePerPage)
 
     fun registerNewProduct(request: ProductRegistrationRequest): Product {
         log.info("Product registration/creation request received: {}", request)

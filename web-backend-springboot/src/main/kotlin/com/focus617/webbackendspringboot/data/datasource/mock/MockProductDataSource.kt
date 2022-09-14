@@ -17,11 +17,8 @@ class MockProductDataSource : ProductDataSource {
 
     override fun findAll(): List<Product> = products
 
-    override fun findOnePage(s: String, sort: Sort, pageNumber: Int, sizePerPage: Int): List<Product> =
-        products.sortedBy { it.id }.windowed(sizePerPage, 1, true)[pageNumber]
-
-    override fun findOnePage(pageNumber: Int, sizePerPage: Int): Page<Product> {
-        val pageable = PageRequest.of(pageNumber - 1, sizePerPage)
+    override fun findOnePageWithSorting(pageNumber: Int, sizePerPage: Int, sort: Sort): Page<Product> {
+        val pageable = PageRequest.of(pageNumber - 1, sizePerPage, sort)
         val resultList = products.windowed(sizePerPage, 1, true)[pageNumber]
         return PageImpl<Product>(resultList, pageable, products.size.toLong())
     }
@@ -47,7 +44,8 @@ class MockProductDataSource : ProductDataSource {
 
     override fun existsById(id: Int): Boolean = products.any { it.id == id }
 
-    override fun countSearch(s: String): Int {
-        return products.size
-    }
+    fun countSearch(s: String): Int = products.size
+
+    fun findOnePage(s: String, sort: Sort, pageNumber: Int, sizePerPage: Int): List<Product> =
+        products.sortedBy { it.id }.windowed(sizePerPage, 1, true)[pageNumber]
 }

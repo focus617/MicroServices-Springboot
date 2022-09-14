@@ -19,10 +19,11 @@ class ProductController(private val service: ProductService) {
 
     @GetMapping("/parameters")
     fun getProductsWithParameters(
-        @RequestParam("s", defaultValue = "") s: String,
-        @RequestParam("sort", defaultValue = "") sort: String,
-        @RequestParam("page", defaultValue = "1") page: Int
-    ): Any = service.getProductsWithParameters(s, sort, page)
+        @RequestParam("field", defaultValue = "price") field: String,
+        @RequestParam("sort", defaultValue = "asc") sort: String,
+        @RequestParam("page", defaultValue = "1") currentPage: Int,
+        @RequestParam("limit", defaultValue = "10") limit: Int
+    ): Any = service.getProductsWithParameters(field, sort, currentPage, limit)
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

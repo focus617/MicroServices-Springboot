@@ -6,13 +6,12 @@ import org.springframework.data.domain.Sort
 
 interface ProductDataSource {
     fun findAll(): List<Product>
-    fun findOnePage(s: String, sort: Sort, pageNumber: Int, sizePerPage: Int = 10): List<Product>
+    fun findOnePageWithSorting(pageNumber: Int, sizePerPage: Int, sort: Sort): Page<Product>
     fun findById(id: Int): Product?
     fun create(product: Product): Product
     fun update(product: Product): Product
     fun deleteById(id: Int): Unit
     fun existsById(id: Int): Boolean
-    fun countSearch(s: String): Int
 
-    fun findOnePage(pageNumber: Int, sizePerPage: Int): Page<Product>
+//    fun countSearch(s: String): Int
 }

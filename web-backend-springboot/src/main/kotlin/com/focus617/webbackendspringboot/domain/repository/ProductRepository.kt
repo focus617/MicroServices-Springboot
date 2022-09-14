@@ -18,17 +18,19 @@ class ProductRepository(@Qualifier("Database") private val dataSource: ProductDa
 
     fun findAll(): List<Product> = dataSource.findAll()
 
-    fun findOnePage(s: String, sort: String, page: Int, sizePerPage: Int = 10): List<Product> {
-        val direction = when (sort) {
-            "asc" -> Sort.by(Sort.Direction.ASC, "price")
-            "desc" -> Sort.by(Sort.Direction.DESC, "price")
+    fun findOnePageWithSorting(
+        field: String,
+        direction: String,
+        pageNumber: Int,
+        sizePerPage: Int = 10
+    ): Page<Product> {
+        val sort = when (direction) {
+            Sort.Direction.ASC.name -> Sort.by(field).ascending()
+            Sort.Direction.DESC.name -> Sort.by(field).descending()
             else -> Sort.unsorted()
         }
-        return dataSource.findOnePage(s, direction, page, sizePerPage)
+        return dataSource.findOnePageWithSorting(pageNumber, sizePerPage, sort)
     }
-
-    fun findOnePage(pageNumber: Int, sizePerPage: Int = 10): Page<Product> =
-        dataSource.findOnePage(pageNumber, sizePerPage)
 
     fun findById(id: Int): Product {
         return dataSource.findById(id) ?: throw NoSuchElementException("Could not find a Product with id=$id")
@@ -83,9 +85,6 @@ class ProductRepository(@Qualifier("Database") private val dataSource: ProductDa
             throw NoSuchElementException("Could not find a product with id=${id}")
         }
     }
-
-    fun countSearch(s: String): Int = dataSource.countSearch(s)
-
 
     private fun existsByCode(code: String): Boolean = dataSource.findAll().any { it.code == code }
 }

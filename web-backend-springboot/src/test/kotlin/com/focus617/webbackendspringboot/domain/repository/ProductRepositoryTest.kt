@@ -60,7 +60,7 @@ internal class ProductRepositoryTest {
         fun `should return size less than sizePerPage`() {
             // When
             val sizePerPage = 5
-            val products = repository.findOnePage("", "", 1, sizePerPage)
+            val products = repository.findOnePageWithSorting("price", "asc", 1, sizePerPage)
 
             // Then
             assertThat(products.size).isLessThanOrEqualTo(sizePerPage)

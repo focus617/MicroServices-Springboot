@@ -17,9 +17,15 @@ class ThymeleafController(private val service: ProductService) {
         return "index"
     }
 
-    @GetMapping("/api/v1/products/pages")
-    fun getPage(model: Model, @RequestParam("page", defaultValue = "1") currentPage: Int): String {
-        val page: Page<Product> = service.getProductsInPage(currentPage)
+    @GetMapping("/api/v1/products/pages/parameters")
+    fun getPageWithSort(
+        model: Model,
+        @RequestParam("field", defaultValue = "price") field: String,
+        @RequestParam("sort", defaultValue = "asc") sort: String,
+        @RequestParam("page", defaultValue = "1") currentPage: Int,
+        @RequestParam("limit", defaultValue = "10") limit: Int
+    ): String {
+        val page: Page<Product> = service.getProductsInPageWithSorting(field, sort, currentPage, limit)
 
         val totalPages = page.totalPages
         val totalItems = page.totalElements

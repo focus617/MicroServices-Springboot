@@ -13,11 +13,8 @@ class DatabaseProductDataSource(private val productDao: ProductDao) : ProductDat
 
     override fun findAll(): List<Product> = productDao.findAll()
 
-    override fun findOnePage(s: String, sort: Sort, pageNumber: Int, sizePerPage: Int): List<Product> =
-        productDao.search(s, PageRequest.of(pageNumber - 1, sizePerPage, sort))
-
-    override fun findOnePage(pageNumber: Int, sizePerPage: Int): Page<Product> {
-        val pageable: Pageable = PageRequest.of(pageNumber - 1, sizePerPage)
+    override fun findOnePageWithSorting(pageNumber: Int, sizePerPage: Int, sort: Sort): Page<Product> {
+        val pageable: Pageable = PageRequest.of(pageNumber - 1, sizePerPage, sort)
         return productDao.findAll(pageable)
     }
 
@@ -34,6 +31,8 @@ class DatabaseProductDataSource(private val productDao: ProductDao) : ProductDat
 
     override fun existsById(id: Int): Boolean = productDao.existsById(id)
 
-    override fun countSearch(s: String): Int = productDao.countSearch(s)
+    fun countSearch(s: String): Int = productDao.countSearch(s)
 
+    fun findOnePage(s: String, sort: Sort, pageNumber: Int, sizePerPage: Int): List<Product> =
+        productDao.search(s, PageRequest.of(pageNumber - 1, sizePerPage, sort))
 }
