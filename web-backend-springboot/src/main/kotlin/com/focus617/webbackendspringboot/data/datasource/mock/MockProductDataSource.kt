@@ -2,8 +2,12 @@ package com.focus617.webbackendspringboot.data.datasource.mock
 
 import com.focus617.webbackendspringboot.data.datasource.ProductDataSource
 import com.focus617.webbackendspringboot.domain.model.Product
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageImpl
+import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Repository
+
 
 @Repository("Mock")
 class MockProductDataSource : ProductDataSource {
@@ -15,6 +19,12 @@ class MockProductDataSource : ProductDataSource {
 
     override fun findOnePage(s: String, sort: Sort, pageNumber: Int, sizePerPage: Int): List<Product> =
         products.sortedBy { it.id }.windowed(sizePerPage, 1, true)[pageNumber]
+
+    override fun findOnePage(pageNumber: Int, sizePerPage: Int): Page<Product> {
+        val pageable = PageRequest.of(pageNumber - 1, sizePerPage)
+        val resultList = products.windowed(sizePerPage, 1, true)[pageNumber]
+        return PageImpl<Product>(resultList, pageable, products.size.toLong())
+    }
 
     override fun findById(id: Int): Product? = products.firstOrNull { it.id == id }
 

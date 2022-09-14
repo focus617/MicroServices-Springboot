@@ -5,6 +5,7 @@ import com.focus617.webbackendspringboot.domain.model.Product
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Qualifier
+import org.springframework.data.domain.Page
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
@@ -25,6 +26,9 @@ class ProductRepository(@Qualifier("Database") private val dataSource: ProductDa
         }
         return dataSource.findOnePage(s, direction, page, sizePerPage)
     }
+
+    fun findOnePage(pageNumber: Int, sizePerPage: Int = 10): Page<Product> =
+        dataSource.findOnePage(pageNumber, sizePerPage)
 
     fun findById(id: Int): Product {
         return dataSource.findById(id) ?: throw NoSuchElementException("Could not find a Product with id=$id")

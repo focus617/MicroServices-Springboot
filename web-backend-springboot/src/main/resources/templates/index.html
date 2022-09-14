@@ -8,6 +8,16 @@
     <title>Document</title>
 </head>
 <body>
-    <span th:text="${welcome}"></span>
+<span th:text="${welcome}"></span>
+
+<footer style="font-size: large" class="panel-footer">
+    Total Items [[${totalItems}]] : Page [[${currentPage}]] of [[${totalPages}]]
+    &nbsp; &nbsp; - &nbsp;
+    <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+        <a th:href="@{'/api/v1/products/pages?page=' + ${i}}">[[${i}]]</a>
+        &nbsp; &nbsp;
+    </span>
+</footer>
+
 </body>
 </html>

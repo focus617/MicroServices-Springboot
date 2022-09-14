@@ -1,6 +1,7 @@
 package com.focus617.webbackendspringboot.data.datasource
 
 import com.focus617.webbackendspringboot.domain.model.Product
+import org.springframework.data.domain.Page
 import org.springframework.data.domain.Sort
 
 interface ProductDataSource {
@@ -12,4 +13,6 @@ interface ProductDataSource {
     fun deleteById(id: Int): Unit
     fun existsById(id: Int): Boolean
     fun countSearch(s: String): Int
+
+    fun findOnePage(pageNumber: Int, sizePerPage: Int): Page<Product>
 }

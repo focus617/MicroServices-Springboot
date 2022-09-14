@@ -6,6 +6,7 @@ import com.focus617.webbackendspringboot.domain.model.Product
 import com.focus617.webbackendspringboot.domain.repository.ProductRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.data.domain.Page
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
 
@@ -22,16 +23,18 @@ class ProductService(
 
     fun getProductsWithParameters(s: String, sort: String, page: Int): Any {
         val sizePerPage = 10
-        val total = productRepository.countSearch(s)
+        val totalElements = productRepository.countSearch(s)
 
         return PaginatedResponse(
             data = productRepository.findOnePage(s, sort, page, sizePerPage),
-            total,
+            totalElements,
             sizePerPage,
             page,
-            totalPages = (total / sizePerPage) + 1
+            totalPages = (totalElements / sizePerPage) + 1
         )
     }
+
+    fun getProductsInPage(page: Int): Page<Product> = productRepository.findOnePage(page)
 
     fun registerNewProduct(request: ProductRegistrationRequest): Product {
         log.info("Product registration/creation request received: {}", request)

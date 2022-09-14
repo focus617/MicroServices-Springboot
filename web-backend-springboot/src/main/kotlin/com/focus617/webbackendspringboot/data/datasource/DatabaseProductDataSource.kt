@@ -2,7 +2,9 @@ package com.focus617.webbackendspringboot.data.datasource
 
 import com.focus617.webbackendspringboot.data.dao.ProductDao
 import com.focus617.webbackendspringboot.domain.model.Product
+import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Repository
 
@@ -13,6 +15,11 @@ class DatabaseProductDataSource(private val productDao: ProductDao) : ProductDat
 
     override fun findOnePage(s: String, sort: Sort, pageNumber: Int, sizePerPage: Int): List<Product> =
         productDao.search(s, PageRequest.of(pageNumber - 1, sizePerPage, sort))
+
+    override fun findOnePage(pageNumber: Int, sizePerPage: Int): Page<Product> {
+        val pageable: Pageable = PageRequest.of(pageNumber - 1, sizePerPage)
+        return productDao.findAll(pageable)
+    }
 
     override fun findById(id: Int): Product? {
         val products = productDao.findAllById(listOf(id))
