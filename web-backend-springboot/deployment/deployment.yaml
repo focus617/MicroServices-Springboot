@@ -74,7 +74,7 @@ spec:
         - mountPath: /var/lib/mysql
           name: mysql-persistence-storage
       - name: web-backend-springboot
-        image: web-backend-springboot:1.0.1
+        image: web-backend-springboot:1.0.2
         imagePullPolicy: IfNotPresent
         resources:
           limits:

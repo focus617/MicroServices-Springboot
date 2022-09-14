@@ -24,7 +24,7 @@ internal class ProductControllerTest @Autowired constructor(
     val baseUrl = "/api/v1/products"
 
     @Nested
-    @DisplayName("GET /api/products")
+    @DisplayName("GET /api/v1/products")
     @TestInstance(Lifecycle.PER_CLASS)
     inner class GetProducts {
         @Test
@@ -42,7 +42,7 @@ internal class ProductControllerTest @Autowired constructor(
         @Test
         fun `should return sorted products with default element number per page`() {
             // When/then
-            mockMvc.get("$baseUrl/backend?sort=desc")
+            mockMvc.get("$baseUrl/parameters?sort=desc")
                 .andDo { print() }
                 .andExpect {
                     status { isOk() }
@@ -56,7 +56,7 @@ internal class ProductControllerTest @Autowired constructor(
         @Test
         fun `should return paged products with requested page`() {
             // When/then
-            mockMvc.get("$baseUrl/backend?sort=asc&page=2")
+            mockMvc.get("$baseUrl/parameters?sort=asc&page=2")
                 .andDo { print() }
                 .andExpect {
                     status { isOk() }
@@ -67,7 +67,7 @@ internal class ProductControllerTest @Autowired constructor(
     }
 
     @Nested
-    @DisplayName("GET /api/products/{id}")
+    @DisplayName("GET /api/v1/products/{id}")
     @TestInstance(Lifecycle.PER_CLASS)
     inner class GetProduct {
 
@@ -102,7 +102,7 @@ internal class ProductControllerTest @Autowired constructor(
     }
 
     @Nested
-    @DisplayName("POST /api/products")
+    @DisplayName("POST /api/v1/products")
     @TestInstance(Lifecycle.PER_CLASS)
     inner class PostNewProduct {
         @Test
@@ -161,7 +161,7 @@ internal class ProductControllerTest @Autowired constructor(
     }
 
     @Nested
-    @DisplayName("PATCH /api/products")
+    @DisplayName("PATCH /api/v1/products")
     @TestInstance(Lifecycle.PER_CLASS)
     inner class PatchExistingProduct {
 
@@ -231,7 +231,7 @@ internal class ProductControllerTest @Autowired constructor(
     }
 
     @Nested
-    @DisplayName("PUT /api/products/{id}?xxx=yyy")
+    @DisplayName("PUT /api/v1/products/{id}?xxx=yyy")
     @TestInstance(Lifecycle.PER_CLASS)
     inner class PutExistingProduct {
         @Test
@@ -358,7 +358,7 @@ internal class ProductControllerTest @Autowired constructor(
     }
 
     @Nested
-    @DisplayName("DELETE /api/products/{id}")
+    @DisplayName("DELETE /api/v1/products/{id}")
     @TestInstance(Lifecycle.PER_CLASS)
     inner class DeleteExistingProduct {
 
