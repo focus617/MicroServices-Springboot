@@ -13,43 +13,6 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: myapp-ingress
-  namespace: pipeline-deployment
-  annotations:
-       nginx.ingress.kubernetes.io/rewrite-target: /
-       nginx.ingress.kubernetes.io/proxy-body-size: "0"
-       nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
-       nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
-       kubernetes.io/tls-acme: 'true'
-spec:
-  ingressClassName: nginx-ingress
-  tls:
-  - hosts:
-    - focus617.com
-    secretName: myapp-secret-tls
-  rules:
-  - host: focus617.com
-    http:
-      paths:
-      - path: /web
-        pathType: Prefix
-        backend:
-          service:
-            name: myapp
-            port:
-              number: 80
-      - path: /registry
-        pathType: Prefix
-        backend:
-          service:
-            name: docker-registry
-            port:
-              number: 5000
-
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
   name: springboot-ingress
   namespace: springboot-deployment
   annotations:
