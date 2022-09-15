@@ -87,7 +87,7 @@ internal class ProductControllerTest @Autowired constructor(
             val id = 1
 
             // When/then
-            val performGet: MvcResult = mockMvc.get("$baseUrl/$id")
+            mockMvc.get("$baseUrl/$id")
                 .andDo { print() }
                 .andExpect {
                     status { isOk() }
@@ -95,9 +95,6 @@ internal class ProductControllerTest @Autowired constructor(
                     jsonPath("$.id") { value(id) }
                 }
                 .andReturn()
-
-//            performGet.response.characterEncoding = "UTF-8"
-//            log.info(performGet.response.contentAsString)
         }
 
         @Test
@@ -163,12 +160,14 @@ internal class ProductControllerTest @Autowired constructor(
                 contentType = MediaType.APPLICATION_JSON
                 content = objectMapper.writeValueAsString(request)
             }
+                .andReturn()
 
             // Then retrieve product with newProduct.id from above performPost and compare
-            val productJson = performPost.andReturn().response.contentAsString
+            performPost.response.characterEncoding = "UTF-8"
+            val productJson = performPost.response.contentAsString
             //从Json数据序列转换到对象
             val product: Product = objectMapper.readValue(productJson, Product::class.java)
-            log.info("PostResponse: $product")
+            log.info("After Post: $product")
 
             mockMvc.get("$baseUrl/${product.id}")
                 .andDo { print() }
