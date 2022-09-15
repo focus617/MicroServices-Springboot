@@ -41,11 +41,11 @@ class ProductService(
 
     fun getProductsInPageWithSorting(
         field: String,
-        direction: String,
+        sortDirection: String,
         pageNumber: Int,
         sizePerPage: Int = 10
     ): Page<Product> =
-        productRepository.findOnePageWithSorting(field, direction, pageNumber, sizePerPage)
+        productRepository.findOnePageWithSorting(field, sortDirection, pageNumber, sizePerPage)
 
     fun registerNewProduct(request: ProductRegistrationRequest): Product {
         log.info("Product registration/creation request received: {}", request)

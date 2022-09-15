@@ -19,6 +19,7 @@ class DataSeeder (private val productRepository: ProductRepository) : Applicatio
             product.description = "Description #$i"
             product.image = "https://focus617.com/200/200?" + Random.nextInt(10000)
             product.price = Random.nextDouble(10.0, 100.0)
+            product.expiringDate = "2022-12-31"
             this.productRepository.create(product)
         }
     }

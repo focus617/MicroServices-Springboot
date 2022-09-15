@@ -1,5 +1,6 @@
 package com.focus617.webbackendspringboot.domain.model
 
+import org.springframework.format.annotation.DateTimeFormat
 import javax.persistence.*
 
 @Table(name = "product")
@@ -30,6 +31,9 @@ data class Product(
     var image: String = "",
 
     @Column
-    var price: Double = 0.0
+    var price: Double = 0.0,
 
+    @Column
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    var expiringDate: String = "2099-12-31"
 )

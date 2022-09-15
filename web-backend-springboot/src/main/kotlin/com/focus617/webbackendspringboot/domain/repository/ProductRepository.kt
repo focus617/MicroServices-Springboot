@@ -22,12 +22,12 @@ class ProductRepository(@Qualifier("Database") private val dataSource: ProductDa
 
     fun findOnePageWithSorting(
         field: String,
-        direction: String,
+        sortDirection: String,
         pageNumber: Int,
         sizePerPage: Int = 10
     ): Page<Product> {
         val sort =
-            if (direction.compareTo(Sort.Direction.ASC.name, ignoreCase = true) ==0 ) Sort.by(field).ascending()
+            if (sortDirection.compareTo(Sort.Direction.ASC.name, ignoreCase = true) ==0 ) Sort.by(field).ascending()
             else Sort.by(field).descending()
 
         return dataSource.findOnePageWithSorting(pageNumber, sizePerPage, sort)
