@@ -3,11 +3,14 @@ package com.focus617.webbackendspringboot.controller
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.focus617.webbackendspringboot.domain.interactors.dtos.ProductRegistrationRequest
 import com.focus617.webbackendspringboot.domain.model.Product
+import com.focus617.webbackendspringboot.domain.repository.ProductRepository
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
@@ -20,8 +23,11 @@ internal class ProductControllerTest @Autowired constructor(
     val mockMvc: MockMvc,
     val objectMapper: ObjectMapper
 ) {
+    companion object {
+        val log: Logger = LoggerFactory.getLogger(this::class.java)
+    }
 
-    val baseUrl = "/api/v1/products"
+    private val baseUrl = "/api/v1/products"
 
     @Nested
     @DisplayName("GET /api/v1/products")
@@ -38,7 +44,12 @@ internal class ProductControllerTest @Autowired constructor(
                     jsonPath("$[0].title") { value("Title #1") }
                 }
         }
+    }
 
+    @Nested
+    @DisplayName("GET /api/v1/products/parameters")
+    @TestInstance(Lifecycle.PER_CLASS)
+    inner class GetProductsWithSorting {
         @Test
         fun `should return sorted products with default element number per page`() {
             // When/then

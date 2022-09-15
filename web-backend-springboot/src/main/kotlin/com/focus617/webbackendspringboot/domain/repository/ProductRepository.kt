@@ -14,7 +14,9 @@ import java.util.*
 @Component
 class ProductRepository(@Qualifier("Database") private val dataSource: ProductDataSource) {
 
-    private val log: Logger = LoggerFactory.getLogger(ProductRepository::class.java)
+    companion object {
+        val log: Logger = LoggerFactory.getLogger(this::class.java)
+    }
 
     fun findAll(): List<Product> = dataSource.findAll()
 

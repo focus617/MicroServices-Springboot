@@ -15,7 +15,9 @@ class ProductService(
     private val productRepository: ProductRepository,
     private val restTemplate: RestTemplate
 ) {
-    private val log: Logger = LoggerFactory.getLogger(ProductService::class.java)
+    companion object {
+        val log: Logger = LoggerFactory.getLogger(this::class.java)
+    }
 
     fun getProducts(): Collection<Product> = productRepository.findAll()
 

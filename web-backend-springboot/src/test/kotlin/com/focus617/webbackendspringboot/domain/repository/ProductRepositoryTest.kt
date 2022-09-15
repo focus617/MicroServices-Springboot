@@ -55,9 +55,9 @@ internal class ProductRepositoryTest {
     @Nested
     @DisplayName("findOnePage")
     @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-    inner class FindOnePage {
+    inner class FindOnePageWithSorting {
         @Test
-        fun `should return size less than sizePerPage`() {
+        fun `return size should less than sizePerPage`() {
             // When
             val sizePerPage = 5
             val products = repository.findOnePageWithSorting("price", "asc", 1, sizePerPage)
