@@ -3,7 +3,6 @@ package com.focus617.webbackendspringboot.controller
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.focus617.webbackendspringboot.domain.interactors.dtos.ProductRegistrationRequest
 import com.focus617.webbackendspringboot.domain.model.Product
-import com.focus617.webbackendspringboot.domain.repository.ProductRepository
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -88,13 +87,17 @@ internal class ProductControllerTest @Autowired constructor(
             val id = 1
 
             // When/then
-            mockMvc.get("$baseUrl/$id")
+            val performGet: MvcResult = mockMvc.get("$baseUrl/$id")
                 .andDo { print() }
                 .andExpect {
                     status { isOk() }
                     content { contentType(MediaType.APPLICATION_JSON) }
                     jsonPath("$.id") { value(id) }
                 }
+                .andReturn()
+
+//            performGet.response.characterEncoding = "UTF-8"
+//            log.info(performGet.response.contentAsString)
         }
 
         @Test
@@ -127,14 +130,11 @@ internal class ProductControllerTest @Autowired constructor(
                 99.99
             )
 
-            // When
-            val performPost = mockMvc.post(baseUrl) {
+            // When / Then
+            mockMvc.post(baseUrl) {
                 contentType = MediaType.APPLICATION_JSON
                 content = objectMapper.writeValueAsString(request)
             }
-
-            // Then
-            performPost
                 .andDo { print() }
                 .andExpect {
                     status { isCreated() }
@@ -145,10 +145,34 @@ internal class ProductControllerTest @Autowired constructor(
                     jsonPath("$.image") { value(request.image) }
                     jsonPath("$.price") { value(request.price) }
                 }
+        }
 
-            //TODO: how to retrieve newProduct.id from above performPost
-//            mockMvc.get("$baseUrl/${request.id}")
-//                .andExpect { content { json(objectMapper.writeValueAsString(request)) } }
+        @Test
+        fun `should creat new Product with same content`() {
+            // Given
+            val request = ProductRegistrationRequest(
+                "Code#52",
+                "Title NewProduct",
+                "Description NewProduct",
+                "https://focus617.com/200/200?188",
+                99.99
+            )
+
+            // When
+            val performPost = mockMvc.post(baseUrl) {
+                contentType = MediaType.APPLICATION_JSON
+                content = objectMapper.writeValueAsString(request)
+            }
+
+            // Then retrieve product with newProduct.id from above performPost and compare
+            val productJson = performPost.andReturn().response.contentAsString
+            //从Json数据序列转换到对象
+            val product: Product = objectMapper.readValue(productJson, Product::class.java)
+            log.info("PostResponse: $product")
+
+            mockMvc.get("$baseUrl/${product.id}")
+                .andDo { print() }
+                .andExpect { content { json(objectMapper.writeValueAsString(product)) } }
         }
 
         @Test
