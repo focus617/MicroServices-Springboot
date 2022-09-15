@@ -18,11 +18,16 @@ java.sourceCompatibility = JavaVersion.VERSION_17
 var mockkVersion = "1.12.7"
 
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+
+    // Web
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+    implementation("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect")
+    implementation("org.webjars:bootstrap:5.2.0")
+    implementation("org.webjars.bower:jquery:3.6.1")
 
     // Hot-Refresh
     implementation("org.springframework.boot:spring-boot-devtools")

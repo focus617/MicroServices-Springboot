@@ -10,6 +10,7 @@ spring:
     username: root
     password: Alc@tel12
     hikari:
+      # used for waiting MySQL container to startup
       initialization-fail-timeout: 10000
 
   jpa:

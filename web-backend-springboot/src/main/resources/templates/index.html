@@ -1,48 +1,76 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtmll-strict-thymeleaf-spring4-4.dtd">
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <link href="/webjars/bootstrap/5.2.0/css/bootstrap.css" rel="stylesheet"/>
+    <script type="text/javascript" src="/webjars/bootstrap/5.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Thymeleaf Tutorial</title>
 </head>
 
 <body>
 <H1 th:text="${welcome}"></H1>
-<H2>Test live reload function</H2>
-<br>
+<H2>List of products</H2>
+<table class="table table-stripped">
+    <thead>
+    <tr>
+        <td>Id</td>
+        <td>Code</td>
+        <td>Title</td>
+        <td>Description</td>
+        <td>Price</td>
+        <td>EXP.</td>
+    </tr>
+    </thead>
+    <tr th:each="product:${products}">
+        <td th:text="${product.id}">Id</td>
+        <td th:text="${product.code}">Code</td>
+        <td th:text="${product.title}">Title</td>
+        <td th:text="${product.description}">Description</td>
+        <td th:text="${product.price}">Price</td>
+        <td th:text="${product.expiringDate}">EXP.</td>
+    </tr>
+</table>
 
-<a th:href="@{'/api/v1/products/page/' + ${currentPage} + '/description?sortDir=' + ${reverseSortDir}}"></a>
+
+<br>
+<a th:href="@{'/api/v1/products/template/parameters?page=' + ${currentPage} + '&sort=' + ${reverseSortDir}}"></a>
 
 <nav aria-label="Page navigation example">
     Total Items [[${totalItems}]] : Page [[${currentPage}]] of [[${totalPages}]]
 
     <ul class="pagination">
         <li class="page-item">
-            <a class="page-link" th:if="${currentPage > 1}" th:href="@{/api/v1/products/pages?page=1}">First</a>
+            <a class="page-link" th:if="${currentPage > 1}" th:href="@{/api/v1/products/template/parameters?page=1}">First</a>
             <span th:unless="${currentPage > 1}">First</span>
         </li>
 
         <li class="page-item">
-            <a th:if="${currentPage > 1}" th:href="@{'/api/v1/products/pages?page=' + ${currentPage - 1}}">Previous</a>
+            <a th:if="${currentPage > 1}"
+               th:href="@{'/api/v1/products/template/parameters?page=' + ${currentPage - 1}}">Previous</a>
             <span th:unless="${currentPage > 1}">Previous</span>
         </li>
 
         <li class="page-item">
             <span th:each="i: ${#numbers.sequence(1, totalPages)}">
-                <a th:if="${i != currentPage}" th:href="@{'/api/v1/products/pages?page=' + ${i}}">[[${i}]]</a>
+                <a th:if="${i != currentPage}"
+                   th:href="@{'/api/v1/products/template/parameters?page=' + ${i}}">[[${i}]]</a>
                 <span th:unless="${i != currentPage}">[[${i}]]</span>
             </span>
         </li>
 
         <li class="page-item">
-            <a th:if="${currentPage < totalPages}" th:href="@{'/api/v1/products/pages?page=' + ${currentPage + 1}}">Next</a>
+            <a th:if="${currentPage < totalPages}"
+               th:href="@{'/api/v1/products/template/parameters?page=' + ${currentPage + 1}}">Next</a>
             <span th:unless="${currentPage < totalPages}">Next</span>
         </li>
 
         <li class="page-item">
-            <a th:if="${currentPage < totalPages}" th:href="@{'/api/v1/products/pages?page=' + ${totalPages}}">Last</a>
+            <a th:if="${currentPage < totalPages}"
+               th:href="@{'/api/v1/products/template/parameters?page=' + ${totalPages}}">Last</a>
             <span th:unless="${currentPage < totalPages}">Last</span>
         </li>
     </ul>
@@ -53,7 +81,7 @@
     Total Items [[${totalItems}]] : Page [[${currentPage}]] of [[${totalPages}]]
     &nbsp; &nbsp; - &nbsp;
     <span th:each="i: ${#numbers.sequence(1, totalPages)}">
-        <a th:href="@{'/api/v1/products/pages?page=' + ${i}}">[[${i}]]</a>
+        <a th:href="@{'/api/v1/products/template/parameters?page=' + ${i}}">[[${i}]]</a>
         &nbsp; &nbsp;
     </span>
 </footer>

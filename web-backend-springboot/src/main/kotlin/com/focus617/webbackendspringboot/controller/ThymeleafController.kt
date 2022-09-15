@@ -17,15 +17,15 @@ class ThymeleafController(private val service: ProductService) {
         return "index"
     }
 
-    @GetMapping("/api/v1/products/pages/parameters")
+    @GetMapping("/api/v1/products/template/parameters")
     fun getPageWithSort(
         model: Model,
-        @RequestParam("field", defaultValue = "price") field: String,
-        @RequestParam("sort", defaultValue = "asc") sort: String,
+        @RequestParam("field", defaultValue = "id") field: String,
+        @RequestParam("sortDir", defaultValue = "asc") sortDir: String,
         @RequestParam("page", defaultValue = "1") currentPage: Int,
         @RequestParam("limit", defaultValue = "10") sizePerPage: Int
     ): String {
-        val page: Page<Product> = service.getProductsInPageWithSorting(field, sort, currentPage, sizePerPage)
+        val page: Page<Product> = service.getProductsInPageWithSorting(field, sortDir, currentPage, sizePerPage)
 
         val totalPages = page.totalPages
         val totalItems = page.totalElements
@@ -35,6 +35,10 @@ class ThymeleafController(private val service: ProductService) {
         model.addAttribute("currentPage", currentPage)
         model.addAttribute("totalPages", totalPages)
         model.addAttribute("totalItems", totalItems)
+
+        model.addAttribute("sortDir", sortDir)
+        model.addAttribute("reverseSortDir", if (sortDir == "asc") "desc" else "asc")
+
         model.addAttribute("products", products)
 
         return "index"
