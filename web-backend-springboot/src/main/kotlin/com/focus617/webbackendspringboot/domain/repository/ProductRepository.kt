@@ -76,7 +76,7 @@ class ProductRepository(@Qualifier("Database") private val dataSource: ProductDa
             product.price = price
         }
 
-        return product
+        return dataSource.update(product)
     }
 
     fun deleteById(id: Int) {

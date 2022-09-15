@@ -1,14 +1,22 @@
 package com.focus617.webbackendspringboot.domain.repository
 
+import com.focus617.webbackendspringboot.data.datasource.ProductDataSource
 import com.focus617.webbackendspringboot.data.datasource.mock.MockProductDataSource
 import com.focus617.webbackendspringboot.domain.model.Product
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.*
+import org.springframework.boot.test.mock.mockito.MockBean
 
 internal class ProductRepositoryTest {
 
-    private val mockDataSource = MockProductDataSource()
-    private val repository = ProductRepository(mockDataSource)
+    private val fakeDataSource = MockProductDataSource()
+
+    @MockBean
+    private val mockDataSource: ProductDataSource = mockk(relaxed = true)
+
 
     private val product101 =
         Product(101, "Code#101", "Title #1", "Description #1", "http://focus617.com/200/200?1", 19.99)
@@ -19,9 +27,9 @@ internal class ProductRepositoryTest {
 
     @BeforeEach
     fun setUp() {
-        mockDataSource.products.add(product101)
-        mockDataSource.products.add(product102)
-        mockDataSource.products.add(product103)
+        fakeDataSource.products.add(product101)
+        fakeDataSource.products.add(product102)
+        fakeDataSource.products.add(product103)
     }
 
     @Nested
@@ -30,21 +38,24 @@ internal class ProductRepositoryTest {
     inner class FindAll {
 
         @Test
-        fun `should provide a collection of products`() {
+        fun `should provide a collection of products in case of fake DataSource`() {
             // When
+            val repository = ProductRepository(fakeDataSource)
             val products = repository.findAll()
 
             // Then
             assertThat(products).isNotEmpty
-            assertThat(products.size).isEqualTo(mockDataSource.products.size)
+            assertThat(products.size).isEqualTo(fakeDataSource.products.size)
         }
 
         @Test
-        fun `should provide some mock data`() {
+        fun `should retrieve correct values in case of fake DataSource`() {
             // When
+            val repository = ProductRepository(fakeDataSource)
             val products = repository.findAll()
 
             // Then
+            assertThat(products).allMatch { it.code.isNotBlank() }
             assertThat(products).allMatch { it.title.isNotBlank() }
             assertThat(products).anyMatch { it.price != 0.0 }
             assertThat(products).anyMatch { it.description.startsWith("Description") }
@@ -60,6 +71,7 @@ internal class ProductRepositoryTest {
         fun `return size should less than sizePerPage`() {
             // When
             val sizePerPage = 5
+            val repository = ProductRepository(fakeDataSource)
             val products = repository.findOnePageWithSorting("price", "asc", 1, sizePerPage)
 
             // Then
@@ -75,6 +87,7 @@ internal class ProductRepositoryTest {
         @Test
         fun `should return the Product with the given id `() {
             // When
+            val repository = ProductRepository(fakeDataSource)
             val product = repository.findById(product102.id)
 
             // Then
@@ -85,7 +98,11 @@ internal class ProductRepositoryTest {
         @Test
         fun `should throw NoSuchElementException if the given product id does not exist`() {
             // Given
-            val invalidId = 9999
+            val invalidId = 1
+            val repository = ProductRepository(mockDataSource)
+
+            // define Mock conditions
+            every { mockDataSource.findById(invalidId) } returns null
 
             // When / Then
             val exceptionThrown = Assertions.assertThrows(
@@ -103,6 +120,29 @@ internal class ProductRepositoryTest {
     inner class Update {
 
         @Test
+        fun `should call datasource update() once`() {
+            // Given
+            val productNew = Product(
+                1,
+                "Code#new",
+                "Title new",
+                "Description new",
+                "http://focus617.com/200/200?new",
+                9.99
+            )
+
+            val repository = ProductRepository(mockDataSource)
+            every { mockDataSource.existsById(productNew.id) } returns true
+            every { mockDataSource.findAll() } returns emptyList()
+
+            // When
+            repository.update(productNew)
+
+            // Then
+            verify(exactly = 1) { mockDataSource.update(productNew) }
+        }
+
+        @Test
         fun `should throw NoSuchElementException if the given product id does not exist`() {
             // Given
             val invalidId = 9999
@@ -116,6 +156,9 @@ internal class ProductRepositoryTest {
                     19.99
                 )
 
+            val repository = ProductRepository(mockDataSource)
+            every { mockDataSource.existsById(invalidId) } returns false
+
             // When / Then
             val exceptionThrown = Assertions.assertThrows(
                 NoSuchElementException::class.java,
@@ -128,15 +171,27 @@ internal class ProductRepositoryTest {
         @Test
         fun `should throw IllegalArgumentException if update product code to any taken code in DB`() {
             // Given
-            product101.code = "Code#102"    // already taken by product102
+            val productId = 101
+            val productExistWithSameCode = Product(
+                productId,
+                "Code#DuplicatedId",
+                "Title invalid",
+                "Description invalid",
+                "http://focus617.com/200/200?invalid",
+                19.99
+            )
+
+            val repository = ProductRepository(mockDataSource)
+            every { mockDataSource.existsById(productId) } returns true
+            every { mockDataSource.findAll() } returns listOf(productExistWithSameCode)
 
             // When / Then
             val exceptionThrown = Assertions.assertThrows(
                 IllegalArgumentException::class.java,
-                { repository.update(product101) },
+                { repository.update(productExistWithSameCode) },
                 "java.util.IllegalArgumentException was expected"
             )
-            assertThat(exceptionThrown).hasMessageContaining("Product CODE ${product101.code} already taken")
+            assertThat(exceptionThrown).hasMessageContaining("Product CODE ${productExistWithSameCode.code} already taken")
         }
     }
 }

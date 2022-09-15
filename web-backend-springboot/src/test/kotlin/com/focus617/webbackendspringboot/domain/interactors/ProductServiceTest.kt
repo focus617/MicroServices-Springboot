@@ -13,7 +13,7 @@ internal class ProductServiceTest {
     private val productService = ProductService(productRepository, RestTemplate())
 
     @Test
-    fun `should call its data source to retrieve banks`() {
+    fun `should call repository findAll() to retrieve products`() {
         // Given
         every { productRepository.findAll() } returns emptyList()   // if pay attention to return value
 
