@@ -19,11 +19,11 @@ internal class ProductRepositoryTest {
 
 
     private val product101 =
-        Product(101, "Code#101", "Title #1", "Description #1", "http://focus617.com/200/200?1", 19.99)
+        Product(101, "Code#101", "Title #1", "Description #1", "https://focus617.com/200/200?1", 19.99)
     private val product102 =
-        Product(102, "Code#102", "Title #2", "Description #2", "http://focus617.com/200/200?2", 29.99)
+        Product(102, "Code#102", "Title #2", "Description #2", "https://focus617.com/200/200?2", 29.99)
     private val product103 =
-        Product(103, "Code#103", "Title #3", "Description #3", "http://focus617.com/200/200?3", 39.99)
+        Product(103, "Code#103", "Title #3", "Description #3", "https://focus617.com/200/200?3", 39.99)
 
     @BeforeEach
     fun setUp() {
@@ -127,7 +127,7 @@ internal class ProductRepositoryTest {
                 "Code#new",
                 "Title new",
                 "Description new",
-                "http://focus617.com/200/200?new",
+                "https://focus617.com/200/200?new",
                 9.99
             )
 
@@ -152,7 +152,7 @@ internal class ProductRepositoryTest {
                     "Code#invalid",
                     "Title invalid",
                     "Description invalid",
-                    "http://focus617.com/200/200?invalid",
+                    "https://focus617.com/200/200?invalid",
                     19.99
                 )
 
@@ -177,7 +177,7 @@ internal class ProductRepositoryTest {
                 "Code#DuplicatedId",
                 "Title invalid",
                 "Description invalid",
-                "http://focus617.com/200/200?invalid",
+                "https://focus617.com/200/200?invalid",
                 19.99
             )
 
