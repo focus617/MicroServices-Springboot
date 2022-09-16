@@ -1,0 +1,78 @@
+pipeline {
+  agent {
+    kubernetes {
+      yamlFile 'jenkins/agent_kubernetes.yaml'   
+    }
+  }
+  options {
+    buildDiscarder(logRotator(numToKeepStr: '3'))
+    durabilityHint('PERFORMANCE_OPTIMIZED')
+    disableConcurrentBuilds()
+  }
+  environment {
+    DH_CREDS=credentials('dh-creds')
+    LOCAL_REPOS='focus617.com/registry'
+    BUILD_TAG='latest'
+  }
+  stages {
+    stage('Retrieve Git Tag') {
+      steps {
+        script {
+          def pom = sh(script:'git rev-parse --short HEAD', returnStdout: true).trim()
+          BUILD_TAG = pom
+          sh "echo Build_Tag=${BUILD_TAG}"
+        }
+      }
+    }
+    stage('Build with Buildah') {
+      steps {
+        container('buildah') {
+          sh 'buildah build -t jenkins-buildah-example ./app'
+        }
+      }
+    }
+    stage('Login to Docker Hub') {
+      steps {
+        container('buildah') {
+          sh 'echo $DH_CREDS_PSW | buildah login -u $DH_CREDS_USR --password-stdin docker.io'
+        }
+      }
+    }
+    stage('Tag image') {
+      steps {
+        container('buildah') {
+          sh "buildah tag jenkins-buildah-example focus617xu/jenkins-buildah-example:1.0.0-${BUILD_TAG}"
+          // sh "buildah tag jenkins-buildah-example ${LOCAL_REPOS}/jenkins-buildah-example:1.0.0-${BUILD_TAG}"
+        }
+      }
+    }
+    stage('Push image into Dockerhub') {
+      steps {
+        container('buildah') {
+          sh "buildah push focus617xu/jenkins-buildah-example:1.0.0-${BUILD_TAG}"
+          // sh "buildah push ${LOCAL_REPOS}/jenkins-buildah-example:1.0.0-${BUILD_TAG}"
+        }
+      }
+    }
+    stage('Deploy App to Kubernetes') {     
+      steps {
+        container('kubectl') {
+          withCredentials([file(credentialsId: 'mykubeconfig', variable: 'KUBECONFIG')]) {
+            // sh """sed -i "s/<REPOS>/${LOCAL_REPOS}/" ./deployment/deployment.yaml"""
+            sh """sed -i "s/<REPOS>/focus617xu/" ./deployment/deployment.yaml"""
+            sh """sed -i "s/<TAG>/1.0.0-${BUILD_TAG}/" ./deployment/deployment.yaml"""
+            sh 'kubectl apply -f ./deployment/deployment.yaml'
+            sh 'kubectl apply -f ./deployment/ingress-resource.yaml'
+          }
+        }
+      }
+    }
+  }
+  post {
+    always {
+      container('buildah') {
+        sh 'buildah logout docker.io'
+      }
+    }
+  }
+}

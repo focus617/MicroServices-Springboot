@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: builder
+spec:
+  containers:
+  - name: kubectl
+    image: joshendriks/alpine-k8s
+    imagePullPolicy: IfNotPresent
+    command:
+    - cat
+    tty: true
+  - name: buildah
+    image: quay.io/buildah/stable:v1.23.1
+    imagePullPolicy: IfNotPresent
+    command:
+    - cat
+    tty: true
+    securityContext:
+      privileged: true
+    volumeMounts:
+    - name: varlibcontainers
+      mountPath: /var/lib/containers
+  volumes:
+    - name: varlibcontainers

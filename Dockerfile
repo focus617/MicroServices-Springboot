@@ -15,7 +15,7 @@ ENTRYPOINT ["java", "-jar", "/app.jar"]
 # How to build a docker image
 #1. ./gradlew boot.Jar
 #2. eval $(minikube docker-env)
-#3. docker build -t web-backend-springboot:1.0 \
+#3. docker build -t web-backend-springboot:1.0.0 \
 #       --build-arg MICRO_SERVICE_NAME=web-backend-springboot
 #       --build-arg JAR_FILE=web-backend-springboot-0.0.1-SNAPSHOT.jar
 #       .
