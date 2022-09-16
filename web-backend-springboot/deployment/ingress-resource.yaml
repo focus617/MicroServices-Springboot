@@ -37,4 +37,4 @@ spec:
             service:
               name: web-backend-springboot
               port:
-                number: 8080
+                number: 8888
