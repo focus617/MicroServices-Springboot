@@ -11,7 +11,7 @@ pipeline {
     disableConcurrentBuilds()
   }
   environment {
-    DH_CREDS=credentials('dh-creds')
+    DH_CREDS=credentials('DockerHub')
     LOCAL_REPOS='focus617.com/registry'
     BUILD_TAG='latest'
   }
