@@ -19,9 +19,9 @@ spec:
     securityContext:
       privileged: true
     volumeMounts:
-    - name: workspace-volume
+    - name: jenkins-agent-volume
       mountPath: /home/jenkins/agent
   volumes:
-    - name: workspace-volume
+    - name: jenkins-agent-volume
       hostPath:
         path: /data/jenkins-volume/agent
