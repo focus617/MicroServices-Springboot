@@ -21,7 +21,7 @@ spring:
         format_sql: false
     hibernate:
       # DB will be drop&create each time, initial data will be seeded by domain.repository.seeders.DataSeeder
-      ddl-auto: create-drop
+      ddl-auto: update
 
   # Html模板
   thymeleaf:

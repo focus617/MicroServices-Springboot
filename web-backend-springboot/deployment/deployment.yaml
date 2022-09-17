@@ -59,22 +59,8 @@ spec:
         tier: database
     spec:
       containers:
-      - name: mysql
-        image: mysql
-        imagePullPolicy: IfNotPresent
-        env:
-        - name: MYSQL_ROOT_PASSWORD
-          value: Alc@tel12
-        - name: MYSQL_DATABASE
-          value: mydatabase
-        ports:
-        - containerPort: 3307
-          name: mysql
-        volumeMounts:
-        - mountPath: /var/lib/mysql
-          name: mysql-persistence-storage
       - name: web-backend-springboot
-        image: web-backend-springboot:1.0.2
+        image: web-backend-springboot:1.0.1
         imagePullPolicy: IfNotPresent
         resources:
           limits:
@@ -82,7 +68,7 @@ spec:
             cpu: "500m"
         ports:
           - containerPort: 8080
-        env:                # Setting Environmental Variables
+        env:                  # Setting Environmental Variables
           - name: DB_HOST     # Setting Database host address
             value: mysql
           - name: DB_NAME     # Setting Database name
@@ -91,6 +77,20 @@ spec:
             value: root
           - name: DB_PASSWORD # Setting Database password
             value: Alc@tel12
+      - name: mysql
+        image: mysql
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: MYSQL_ROOT_PASSWORD
+            value: Alc@tel12
+          - name: MYSQL_DATABASE
+            value: mydatabase
+        ports:
+          - containerPort: 3307
+            name: mysql
+        volumeMounts:
+          - mountPath: /var/lib/mysql
+            name: mysql-persistence-storage
       volumes:
       - name: mysql-persistence-storage
         persistentVolumeClaim:
@@ -128,6 +128,6 @@ spec:
     app: web-backend-springboot
   ports:
   - protocol: TCP
-    port: 8888
+    port: 8080
     targetPort: 8080
 

@@ -5,7 +5,8 @@ pipeline {
     }
   }
   options {
-    buildDiscarder(logRotator(numToKeepStr: '3'))
+  // Keep the 5 most recent builds
+    buildDiscarder(logRotator(numToKeepStr: '5'))
     durabilityHint('PERFORMANCE_OPTIMIZED')
     disableConcurrentBuilds()
   }
@@ -24,13 +25,13 @@ pipeline {
         }
       }
     }
-    stage('Build with Buildah') {
-      steps {
-        container('buildah') {
-          sh 'buildah build -t jenkins-buildah-example ./app'
-        }
-      }
-    }
+//     stage('Build with Buildah') {
+//       steps {
+//         container('buildah') {
+//           sh 'buildah build -t jenkins-buildah-example ./app'
+//         }
+//       }
+//     }
     stage('Login to Docker Hub') {
       steps {
         container('buildah') {
@@ -38,35 +39,35 @@ pipeline {
         }
       }
     }
-    stage('Tag image') {
-      steps {
-        container('buildah') {
-          sh "buildah tag jenkins-buildah-example focus617xu/jenkins-buildah-example:1.0.0-${BUILD_TAG}"
-          // sh "buildah tag jenkins-buildah-example ${LOCAL_REPOS}/jenkins-buildah-example:1.0.0-${BUILD_TAG}"
-        }
-      }
-    }
-    stage('Push image into Dockerhub') {
-      steps {
-        container('buildah') {
-          sh "buildah push focus617xu/jenkins-buildah-example:1.0.0-${BUILD_TAG}"
-          // sh "buildah push ${LOCAL_REPOS}/jenkins-buildah-example:1.0.0-${BUILD_TAG}"
-        }
-      }
-    }
-    stage('Deploy App to Kubernetes') {     
-      steps {
-        container('kubectl') {
-          withCredentials([file(credentialsId: 'mykubeconfig', variable: 'KUBECONFIG')]) {
-            // sh """sed -i "s/<REPOS>/${LOCAL_REPOS}/" ./deployment/deployment.yaml"""
-            sh """sed -i "s/<REPOS>/focus617xu/" ./deployment/deployment.yaml"""
-            sh """sed -i "s/<TAG>/1.0.0-${BUILD_TAG}/" ./deployment/deployment.yaml"""
-            sh 'kubectl apply -f ./deployment/deployment.yaml'
-            sh 'kubectl apply -f ./deployment/ingress-resource.yaml'
-          }
-        }
-      }
-    }
+//     stage('Tag image') {
+//       steps {
+//         container('buildah') {
+//           sh "buildah tag jenkins-buildah-example focus617xu/jenkins-buildah-example:1.0.0-${BUILD_TAG}"
+//           // sh "buildah tag jenkins-buildah-example ${LOCAL_REPOS}/jenkins-buildah-example:1.0.0-${BUILD_TAG}"
+//         }
+//       }
+//     }
+//     stage('Push image into Dockerhub') {
+//       steps {
+//         container('buildah') {
+//           sh "buildah push focus617xu/jenkins-buildah-example:1.0.0-${BUILD_TAG}"
+//           // sh "buildah push ${LOCAL_REPOS}/jenkins-buildah-example:1.0.0-${BUILD_TAG}"
+//         }
+//       }
+//     }
+//     stage('Deploy App to Kubernetes') {
+//       steps {
+//         container('kubectl') {
+//           withCredentials([file(credentialsId: 'mykubeconfig', variable: 'KUBECONFIG')]) {
+//             // sh """sed -i "s/<REPOS>/${LOCAL_REPOS}/" ./deployment/deployment.yaml"""
+//             sh """sed -i "s/<REPOS>/focus617xu/" ./deployment/deployment.yaml"""
+//             sh """sed -i "s/<TAG>/1.0.0-${BUILD_TAG}/" ./deployment/deployment.yaml"""
+//             sh 'kubectl apply -f ./deployment/deployment.yaml'
+//             sh 'kubectl apply -f ./deployment/ingress-resource.yaml'
+//           }
+//         }
+//       }
+//     }
   }
   post {
     always {

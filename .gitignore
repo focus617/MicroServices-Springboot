@@ -33,4 +33,7 @@ out/
 ### VS Code ###
 .vscode/
 
+tls.crt
+tls.key
+
 
