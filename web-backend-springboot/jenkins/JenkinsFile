@@ -31,7 +31,7 @@ pipeline {
     stage('Build') {
       steps {
         sh 'gradle --version'
-        sh 'echo "build - ./gradlew assemble'
+        sh 'echo "build - ./gradlew assemble"'
       }
     }
     stage('Test') {
