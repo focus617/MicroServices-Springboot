@@ -19,7 +19,9 @@ spec:
     securityContext:
       privileged: true
     volumeMounts:
-    - name: varlibcontainers
+    - name: minimounted
       mountPath: /var/lib/containers
   volumes:
-    - name: varlibcontainers
+    - name: minimounted
+      hostPath:
+        path: /data/jenkins-volume/agents
