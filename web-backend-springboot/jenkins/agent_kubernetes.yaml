@@ -19,9 +19,9 @@ spec:
     securityContext:
       privileged: true
     volumeMounts:
-    - name: minimounted
-      mountPath: /var/lib/containers
+    - name: workspace-volume
+      mountPath: /home/jenkins/agent
   volumes:
-    - name: minimounted
+    - name: workspace-volume
       hostPath:
-        path: /data/jenkins-volume/agents
+        path: /data/jenkins-volume/agent
