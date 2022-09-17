@@ -4,6 +4,9 @@ pipeline {
       yamlFile 'web-backend-springboot/jenkins/agent_kubernetes.yaml'
     }
   }
+  tools {
+    gradle '7.5'
+  }
   options {
   // Keep the 5 most recent builds
     buildDiscarder(logRotator(numToKeepStr: '5'))
@@ -27,10 +30,9 @@ pipeline {
     }
     stage('Build') {
       steps {
-        container('buildah') {
-          sh 'echo "build - ./gradlew assemble"'
+        sh 'echo "build - ./gradlew assemble"'
+        sh 'gradle --version'
 //           sh 'buildah build -t jenkins-buildah-example ./app'
-        }
       }
     }
     stage('Test') {
