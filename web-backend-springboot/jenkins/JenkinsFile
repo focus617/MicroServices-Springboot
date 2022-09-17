@@ -30,10 +30,8 @@ pipeline {
     }
     stage('Build') {
       steps {
-        sh 'echo "build - ./gradlew assemble"'
-        sh 'sleep(9999999999)'
         sh 'gradle --version'
-//           sh 'buildah build -t jenkins-buildah-example ./app'
+        sh 'echo "build - ./gradlew assemble'
       }
     }
     stage('Test') {
