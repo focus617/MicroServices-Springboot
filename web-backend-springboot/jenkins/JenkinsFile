@@ -25,13 +25,21 @@ pipeline {
         }
       }
     }
-//     stage('Build with Buildah') {
-//       steps {
-//         container('buildah') {
+    stage('Build') {
+      steps {
+        container('buildah') {
+          sh 'echo "build - ./gradlew assemble"'
 //           sh 'buildah build -t jenkins-buildah-example ./app'
-//         }
-//       }
-//     }
+        }
+      }
+    }
+    stage('Test') {
+      steps {
+        container('buildah') {
+          sh 'echo "test - ./gradlew test"'
+        }
+      }
+    }
     stage('Login to Docker Hub') {
       steps {
         container('buildah') {
@@ -39,14 +47,14 @@ pipeline {
         }
       }
     }
-//     stage('Tag image') {
-//       steps {
-//         container('buildah') {
+    stage('Tag image') {
+      steps {
+        container('buildah') {
+          sh 'echo tag image'
 //           sh "buildah tag jenkins-buildah-example focus617xu/jenkins-buildah-example:1.0.0-${BUILD_TAG}"
-//           // sh "buildah tag jenkins-buildah-example ${LOCAL_REPOS}/jenkins-buildah-example:1.0.0-${BUILD_TAG}"
-//         }
-//       }
-//     }
+        }
+      }
+    }
 //     stage('Push image into Dockerhub') {
 //       steps {
 //         container('buildah') {
