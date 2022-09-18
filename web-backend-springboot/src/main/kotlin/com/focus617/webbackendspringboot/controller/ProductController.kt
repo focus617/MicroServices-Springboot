@@ -50,7 +50,7 @@ class ProductController(private val service: ProductService) {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun deleteBank(@PathVariable id: Int): Unit = service.deleteProduct(id)
+    fun deleteProduct(@PathVariable id: Int): Unit = service.deleteProduct(id)
 
     @ExceptionHandler(NoSuchElementException::class)
     fun handleNotFound(e: NoSuchElementException): ResponseEntity<String> =

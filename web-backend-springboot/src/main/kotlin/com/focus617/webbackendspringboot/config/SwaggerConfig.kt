@@ -16,7 +16,7 @@ class Swagger3Config {
 
     // 对文档摘要信息的描述
     private fun apiInfo(): ApiInfo = ApiInfoBuilder()
-        .title("API document for project web-backend-springboot")
+        .title("API document for web-backend-springboot")
         .description("RESTful API definition by Swagger3.0")
         .termsOfServiceUrl("http://focus617.com")
         .version("1.0")
