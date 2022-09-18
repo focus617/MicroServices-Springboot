@@ -34,7 +34,12 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     runtimeOnly("mysql:mysql-connector-java")
 
+    // Swagger for API document
+    implementation("io.springfox:springfox-boot-starter:3.0.0")
+
     // Test
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("io.mockk:mockk:${mockkVersion}")
 
 }
 
