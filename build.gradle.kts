@@ -6,10 +6,6 @@ buildscript {
     }
 }
 
-ext {
-    set("springCloudVersion", "Hoxton.SR8")
-}
-
 plugins {
     id("org.springframework.boot") version "2.7.3"
     id("io.spring.dependency-management") version "1.0.13.RELEASE"
@@ -17,43 +13,58 @@ plugins {
     kotlin("plugin.spring") version "1.6.21"
 }
 
-repositories {
-    mavenCentral()
-}
+allprojects {
+    repositories {
+        mavenCentral()
+    }
 
-group = "com.focus617"
-version = "0.0.1-SNAPSHOT"
-java.sourceCompatibility = JavaVersion.VERSION_17
+    group = "com.focus617"
+    version = "0.0.1-SNAPSHOT"
 
-var springCloudVersion = "2021.0.4"
-var mockkVersion = "1.12.7"
+    ext {
+        set("springCloudVersion", "Hoxton.SR8")
+    }
 
-//extra["spring-cloud-dependencies.version"] = "2021.0.4"
+    apply(plugin = "idea")
+    apply(plugin = "kotlin")
+    apply(plugin = "org.springframework.boot")
+    apply(plugin = "io.spring.dependency-management")
 
-apply(plugin = "io.spring.dependency-management")
-
-dependencyManagement {
-    imports {
-        mavenBom("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}")
+    dependencyManagement {
+        imports {
+            mavenBom("org.springframework.cloud:spring-cloud-dependencies:${ext["springCloudVersion"]}")
+        }
     }
 }
 
-dependencies {
-    implementation("org.springframework.boot:spring-boot-starter")
-    implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    // Test
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("io.mockk:mockk:${mockkVersion}")
-}
+subprojects {
+    java.sourceCompatibility = JavaVersion.VERSION_17
 
-tasks.withType<Test> {
-    useJUnitPlatform()
-}
+    val mockkVersion = "1.12.7"
 
-tasks.withType<KotlinCompile> {
-    kotlinOptions {
-        freeCompilerArgs = listOf("-Xjsr305=strict")
-        jvmTarget = "17"
+    dependencies {
+        implementation("org.springframework.boot:spring-boot-starter")
+
+        implementation("org.jetbrains.kotlin:kotlin-reflect")
+        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+
+        // Swagger for API document
+        implementation("io.springfox:springfox-boot-starter:3.0.0")
+
+        // Test
+        testImplementation("org.springframework.boot:spring-boot-starter-test")
+        testImplementation("io.mockk:mockk:${mockkVersion}")
+    }
+
+
+    tasks.withType<Test> {
+        useJUnitPlatform()
+    }
+
+    tasks.withType<KotlinCompile> {
+        kotlinOptions {
+            freeCompilerArgs = listOf("-Xjsr305=strict")
+            jvmTarget = "17"
+        }
     }
 }
