@@ -21,9 +21,7 @@ allprojects {
     group = "com.focus617"
     version = "0.0.1-SNAPSHOT"
 
-    ext {
-        set("springCloudVersion", "Hoxton.SR8")
-    }
+    extra["springCloudVersion"] = "2021.0.4"
 
     apply(plugin = "idea")
     apply(plugin = "kotlin")
@@ -32,39 +30,39 @@ allprojects {
 
     dependencyManagement {
         imports {
-            mavenBom("org.springframework.cloud:spring-cloud-dependencies:${ext["springCloudVersion"]}")
+            mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")
         }
     }
 }
 
-subprojects {
-    java.sourceCompatibility = JavaVersion.VERSION_17
+//subprojects {
+java.sourceCompatibility = JavaVersion.VERSION_17
 
-    val mockkVersion = "1.12.7"
+extra["mockkVersion"] = "1.12.7"
 
-    dependencies {
-        implementation("org.springframework.boot:spring-boot-starter")
+dependencies {
+    implementation("org.springframework.boot:spring-boot-starter")
 
-        implementation("org.jetbrains.kotlin:kotlin-reflect")
-        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
-        // Swagger for API document
-        implementation("io.springfox:springfox-boot-starter:3.0.0")
+    // Swagger for API document
+    implementation("io.springfox:springfox-boot-starter:3.0.0")
 
-        // Test
-        testImplementation("org.springframework.boot:spring-boot-starter-test")
-        testImplementation("io.mockk:mockk:${mockkVersion}")
-    }
+    // Test
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("io.mockk:mockk:${property("mockkVersion")}")
+}
 
 
-    tasks.withType<Test> {
-        useJUnitPlatform()
-    }
+tasks.withType<Test> {
+    useJUnitPlatform()
+}
 
-    tasks.withType<KotlinCompile> {
-        kotlinOptions {
-            freeCompilerArgs = listOf("-Xjsr305=strict")
-            jvmTarget = "17"
-        }
+tasks.withType<KotlinCompile> {
+    kotlinOptions {
+        freeCompilerArgs = listOf("-Xjsr305=strict")
+        jvmTarget = "17"
     }
 }
+//}
