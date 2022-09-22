@@ -43,6 +43,7 @@ spec:
       containers:
       - name: jenkins
         image: jenkins/jenkins:lts-jdk11
+        imagePullPolicy: IfNotPresent
         resources:
           limits:
             memory: 4Gi
