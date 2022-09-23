@@ -38,7 +38,7 @@ allprojects {
 //subprojects {
 java.sourceCompatibility = JavaVersion.VERSION_17
 
-extra["mockkVersion"] = "1.12.7"
+extra["mockkVersion"] = "1.12.8"
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter")

@@ -15,7 +15,7 @@ group = "com.focus617"
 version = "0.0.1-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_17
 
-extra["mockkVersion"] = "1.12.7"
+extra["mockkVersion"] = "1.12.8"
 
 dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
