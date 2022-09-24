@@ -41,7 +41,7 @@ dependencies {
     // Swagger for API document
     implementation("io.springfox:springfox-boot-starter:${property("springfoxVersion")}")
 
-    // Service-Registry: Eureka
+    // Service-Registry: Eureka Client
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
 
     // Test
