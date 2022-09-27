@@ -42,7 +42,7 @@ spec:
     spec:
       containers:
       - name: jenkins
-        image: jenkins/jenkins:lts-jdk11
+        image: jenkins/jenkins:latest-jdk17
         imagePullPolicy: IfNotPresent
         resources:
           limits:
