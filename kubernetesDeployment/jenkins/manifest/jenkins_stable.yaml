@@ -51,8 +51,8 @@ spec:
             memory: 1Gi
             cpu: 1000m
           requests:
-            memory: 512Mi
-            cpu: 500m
+            memory: 256Mi
+            cpu: 50m
         ports:
         - containerPort: 8080
           name: "http-port"
